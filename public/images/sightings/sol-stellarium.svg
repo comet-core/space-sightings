@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%" style="background:#020611;font-family:monospace;">
+  <defs>
+    <radialGradient id="skyGradSol" cx="50%" cy="50%" r="75%">
+      <stop offset="0%" stop-color="#0a1228" />
+      <stop offset="70%" stop-color="#030814" />
+      <stop offset="100%" stop-color="#010307" />
+    </radialGradient>
+    <filter id="neonGlowSol" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="800" fill="url(#skyGradSol)" />
+
+  <!-- Coordinate Grid -->
+  <g stroke="#1e293b" stroke-width="1" stroke-dasharray="4,6">
+    <line x1="0" y1="200" x2="1200" y2="200" />
+    <line x1="0" y1="400" x2="1200" y2="400" />
+    <line x1="0" y1="600" x2="1200" y2="600" />
+    <line x1="300" y1="0" x2="300" y2="800" />
+    <line x1="600" y1="0" x2="600" y2="800" />
+    <line x1="900" y1="0" x2="900" y2="800" />
+  </g>
+
+  <g fill="#475569" font-size="11">
+    <text x="15" y="195">DEC +21°00'00"</text>
+    <text x="15" y="395">DEC +19°10'42"</text>
+    <text x="15" y="595">DEC +17°00'00"</text>
+    <text x="305" y="30">RA 03h 15m</text>
+    <text x="605" y="30">RA 03h 31m 20s</text>
+    <text x="905" y="30">RA 03h 48m</text>
+  </g>
+
+  <!-- Ecliptic Line (Golden Dashed Line) -->
+  <line x1="50" y1="520" x2="1150" y2="280" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.6" />
+  <text x="1050" y="270" fill="#f59e0b" font-size="11" opacity="0.8">ECLIPTIC PLANE</text>
+
+  <!-- Constellation Taurus boundary / Pleiades neighbor -->
+  <g stroke="#3b82f6" stroke-opacity="0.45" stroke-width="1.5" stroke-dasharray="4,4">
+    <line x1="220" y1="280" x2="420" y2="390" />
+    <line x1="420" y1="390" x2="520" y2="520" />
+    <line x1="720" y1="250" x2="880" y2="360" />
+    <line x1="880" y1="360" x2="1050" y2="420" />
+  </g>
+  <text x="820" y="330" fill="#38bdf8" font-size="13" font-weight="bold" letter-spacing="2" opacity="0.6">TAURUS</text>
+  <text x="310" y="360" fill="#38bdf8" font-size="13" font-weight="bold" letter-spacing="2" opacity="0.6">ARIES</text>
+
+  <!-- Solar Photosphere Disc in Stellarium -->
+  <circle cx="600" cy="400" r="140" fill="#fef08a" opacity="0.85" />
+  <circle cx="600" cy="400" r="140" fill="none" stroke="#f59e0b" stroke-width="2" />
+
+  <!-- SUNSPOT GROUP IN THE BOTTOM RIGHT QUADRANT (Matching real sun.jpg capture) -->
+  <!-- Disk center is (600, 400), radius is 140. Bottom right quadrant: x > 600, y > 400. Pos: (668, 470) -->
+  <g id="bottom-right-sunspot">
+    <!-- Penumbra -->
+    <ellipse cx="668" cy="470" rx="9" ry="7" fill="#78350f" opacity="0.9" />
+    <!-- Umbra Core -->
+    <ellipse cx="667" cy="470" rx="4.5" ry="3.5" fill="#1c0b02" />
+    <circle cx="673" cy="473" r="1.8" fill="#1c0b02" />
+    
+    <!-- Sunspot Target Indicator Reticle -->
+    <circle cx="668" cy="470" r="18" fill="none" stroke="#00f0ff" stroke-width="1" stroke-dasharray="3,2" />
+    <line x1="686" y1="470" x2="740" y2="470" stroke="#00f0ff" stroke-width="1" />
+    <line x1="740" y1="470" x2="760" y2="495" stroke="#00f0ff" stroke-width="1" />
+    <text x="765" y="500" fill="#00f0ff" font-size="11" font-weight="bold">SUNSPOT GROUP (SE QUADRANT)</text>
+    <text x="765" y="515" fill="#94a3b8" font-size="10">RESOLVED IN HANDHELD SENSOR</text>
+  </g>
+
+  <!-- Telrad Sight Reticle -->
+  <g stroke="#ef4444" stroke-width="1.5" fill="none" filter="url(#neonGlowSol)">
+    <circle cx="600" cy="400" r="45" stroke-dasharray="8,6" />
+    <circle cx="600" cy="400" r="140" stroke-dasharray="14,10" />
+    <circle cx="600" cy="400" r="260" stroke-dasharray="20,15" />
+    <line x1="600" y1="120" x2="600" y2="350" />
+    <line x1="600" y1="450" x2="600" y2="680" />
+    <line x1="320" y1="400" x2="550" y2="400" />
+    <line x1="650" y1="400" x2="880" y2="400" />
+    <circle cx="600" cy="400" r="2" fill="#ef4444" />
+  </g>
+
+  <!-- Telemetry Box -->
+  <rect x="50" y="50" width="380" height="150" fill="#030712" fill-opacity="0.85" stroke="#ef4444" stroke-width="1" rx="4" />
+  <g fill="#f87171" font-size="11" letter-spacing="1">
+    <text x="70" y="80" font-weight="bold" fill="#ffffff" font-size="13">STELLARIUM SOLAR EPHEMERIS</text>
+    <text x="70" y="105">OBJECT: SOL (SUN)</text>
+    <text x="70" y="125">APP MAG: -26.74 · TAURUS CONSTELLATION</text>
+    <text x="70" y="145">COORDS: RA 03h 31m 20s · DEC +19°10'42"</text>
+    <text x="70" y="165">FOV: 4.0° TELRAD · ALT: +24°15' · AZ: 288°</text>
+    <text x="70" y="185" fill="#34d399">STATUS: SOLVED &amp; SUNSPOT CORRELATED</text>
+  </g>
+
+  <text x="1140" y="760" fill="#ef4444" text-anchor="end" font-size="13" opacity="0.85">STELLARIUM RETICLE VERIFICATION OVERLAY</text>
+</svg>

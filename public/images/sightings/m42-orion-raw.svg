@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%" style="background:#020307;font-family:monospace;">
+  <defs>
+    <!-- Background Space -->
+    <radialGradient id="nebulaSpace" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#090b16" />
+      <stop offset="50%" stop-color="#04060d" />
+      <stop offset="100%" stop-color="#010205" />
+    </radialGradient>
+
+    <!-- H-alpha Emission Nebula Glow (Magenta/Rose) -->
+    <radialGradient id="hAlpha" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ec4899" stop-opacity="0.8" />
+      <stop offset="30%" stop-color="#db2777" stop-opacity="0.6" />
+      <stop offset="65%" stop-color="#9333ea" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Oxygen III Ionization Core (Cyan) -->
+    <radialGradient id="oIII" cx="48%" cy="48%" r="40%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
+      <stop offset="25%" stop-color="#67e8f9" stop-opacity="0.8" />
+      <stop offset="55%" stop-color="#06b6d4" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Trapezium Stellar Core -->
+    <radialGradient id="trapCore" cx="50%" cy="50%" r="20%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="1" />
+      <stop offset="50%" stop-color="#bae6fd" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="800" fill="url(#nebulaSpace)" />
+
+  <!-- Dense Field Stars in Orion Sword -->
+  <g opacity="0.75">
+    <circle cx="140" cy="180" r="1.5" fill="#ffffff" />
+    <circle cx="290" cy="670" r="1.2" fill="#ffffff" />
+    <circle cx="950" cy="140" r="1.0" fill="#ffffff" />
+    <circle cx="1060" cy="620" r="1.4" fill="#a5f3fc" />
+    <circle cx="420" cy="190" r="0.9" fill="#ffffff" />
+    <circle cx="780" cy="660" r="1.1" fill="#ffffff" />
+    <circle cx="890" cy="320" r="1.8" fill="#fbcfe8" />
+    <circle cx="220" cy="480" r="1.0" fill="#ffffff" />
+    <circle cx="510" cy="110" r="2.2" fill="#bae6fd" />
+    <circle cx="710" cy="150" r="1.3" fill="#ffffff" />
+  </g>
+
+  <!-- Large Outer Hydrogen-Alpha Wings -->
+  <g transform="translate(600,410) rotate(-15)">
+    <!-- East Wing -->
+    <path d="M 0 0 C 180 -180, 420 -80, 480 90 C 400 180, 240 140, 0 40 Z" fill="url(#hAlpha)" opacity="0.6" />
+    <!-- West Wing -->
+    <path d="M 0 0 C -190 -160, -380 -50, -420 110 C -340 190, -180 120, 0 30 Z" fill="url(#hAlpha)" opacity="0.6" />
+    <!-- Center Body -->
+    <ellipse cx="0" cy="10" rx="260" ry="180" fill="url(#hAlpha)" opacity="0.75" />
+    
+    <!-- OIII Cyan Core (Ionized gas from Trapezium) -->
+    <ellipse cx="-15" cy="-10" rx="150" ry="110" fill="url(#oIII)" />
+
+    <!-- Dark Dust Lane (Fish's Mouth - Sinus Magnus) -->
+    <path d="M -90 -110 C -40 -40, -10 -20, -5 20 C -20 10, -50 -10, -100 -50 Z" fill="#020306" opacity="0.85" />
+    <path d="M 30 -120 C 0 -60, -15 -10, -5 25 C 20 5, 40 -40, 80 -90 Z" fill="#020306" opacity="0.75" />
+
+    <!-- Trapezium Cluster Stars (Theta 1 Orionis A, B, C, D) -->
+    <circle cx="-10" cy="10" r="60" fill="url(#trapCore)" />
+    <!-- 4 Stars of the Trapezium -->
+    <circle cx="-15" cy="5" r="3.5" fill="#ffffff" />
+    <circle cx="-7" cy="16" r="3.0" fill="#ffffff" />
+    <circle cx="-20" cy="18" r="2.8" fill="#ffffff" />
+    <circle cx="-4" cy="6" r="4.2" fill="#ffffff" />
+  </g>
+
+  <!-- Camera HUD -->
+  <g stroke="#00f0ff" stroke-opacity="0.3" fill="none" stroke-width="1">
+    <path d="M 60 60 L 90 60 M 60 60 L 60 90" />
+    <path d="M 1140 60 L 1110 60 M 1140 60 L 1140 90" />
+    <path d="M 60 740 L 90 740 M 60 740 L 60 710" />
+    <path d="M 1140 740 L 1110 740 M 1140 740 L 1140 710" />
+  </g>
+
+  <!-- Telemetry Overlay -->
+  <g fill="#00f0ff" opacity="0.85" font-size="12" letter-spacing="1.5">
+    <text x="70" y="85">TARGET: MESSIER 42 (GREAT ORION NEBULA)</text>
+    <text x="70" y="105">OPTICS: 71mm APO REFRACTOR F/4.9 + DUAL-NARROWBAND</text>
+    <text x="70" y="125">EXPOSURE: 60 x 120s (2.0 HRS TOTAL) · ISO 1600 · STACKED</text>
+    
+    <text x="1130" y="85" text-anchor="end">DIST: 84,743,000 AU (1,344 LIGHT YRS)</text>
+    <text x="1130" y="105" text-anchor="end">LIGHT TRAVEL: 1,344 YEARS</text>
+    <text x="1130" y="125" text-anchor="end">APP MAG: +4.00 · ORION SWORD</text>
+  </g>
+</svg>
+

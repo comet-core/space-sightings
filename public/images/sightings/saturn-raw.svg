@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%" style="background:#04050a;font-family:monospace;">
+  <defs>
+    <!-- Background Vignette -->
+    <radialGradient id="spaceBg" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#0c0e17" />
+      <stop offset="60%" stop-color="#06070c" />
+      <stop offset="100%" stop-color="#020305" />
+    </radialGradient>
+    
+    <!-- Planet Glow -->
+    <radialGradient id="saturnGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fff8db" stop-opacity="0.9" />
+      <stop offset="30%" stop-color="#e2c889" stop-opacity="0.7" />
+      <stop offset="70%" stop-color="#c49e52" stop-opacity="0.2" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Ring Gradient -->
+    <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#baa06a" stop-opacity="0.4" />
+      <stop offset="25%" stop-color="#eed8a1" stop-opacity="0.95" />
+      <stop offset="48%" stop-color="#d4b574" stop-opacity="0.85" />
+      <stop offset="52%" stop-color="#11131c" stop-opacity="0.95" /> <!-- Cassini Division -->
+      <stop offset="56%" stop-color="#baa06a" stop-opacity="0.8" />
+      <stop offset="85%" stop-color="#f2dfb1" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#7e693e" stop-opacity="0.3" />
+    </linearGradient>
+
+    <!-- Planet Globe -->
+    <radialGradient id="globeGrad" cx="42%" cy="40%" r="58%">
+      <stop offset="0%" stop-color="#fff3cf" />
+      <stop offset="35%" stop-color="#e5c57e" />
+      <stop offset="70%" stop-color="#a67c38" />
+      <stop offset="95%" stop-color="#4a3414" />
+      <stop offset="100%" stop-color="#140d04" />
+    </radialGradient>
+  </defs>
+
+  <!-- Deep Space Canvas -->
+  <rect width="1200" height="800" fill="url(#spaceBg)" />
+
+  <!-- Background Stars & Mobile Sensor Grain -->
+  <g opacity="0.65">
+    <circle cx="120" cy="140" r="1.2" fill="#ffffff" />
+    <circle cx="280" cy="90" r="0.8" fill="#a5c4d4" />
+    <circle cx="210" cy="340" r="1.5" fill="#ffffff" />
+    <circle cx="1040" cy="180" r="1.0" fill="#ffffff" />
+    <circle cx="920" cy="290" r="1.8" fill="#ffd8a8" />
+    <circle cx="850" cy="620" r="0.9" fill="#ffffff" />
+    <circle cx="340" cy="680" r="1.1" fill="#ffffff" />
+    <circle cx="1110" cy="540" r="1.4" fill="#a5c4d4" />
+    <circle cx="70" cy="520" r="0.7" fill="#ffffff" />
+    <circle cx="580" cy="110" r="1.1" fill="#ffffff" />
+    <circle cx="450" cy="220" r="0.6" fill="#ffffff" />
+    <circle cx="780" cy="160" r="0.7" fill="#ffffff" />
+  </g>
+
+  <!-- Titan (Moon) -->
+  <circle cx="890" cy="345" r="2.5" fill="#fef08a" />
+  <text x="905" y="348" fill="#fef08a" font-size="11" opacity="0.6" letter-spacing="1">TITAN (mag +8.4)</text>
+
+  <!-- Outer Atmospheric Glow -->
+  <circle cx="600" cy="400" r="190" fill="url(#saturnGlow)" />
+
+  <!-- Saturn System (Tilted -23 deg) -->
+  <g transform="translate(600, 400) rotate(-22)">
+    <!-- Back portion of ring -->
+    <ellipse cx="0" cy="0" rx="240" ry="58" fill="none" stroke="url(#ringGrad)" stroke-width="38" opacity="0.9" />
+    <ellipse cx="0" cy="0" rx="210" ry="50" fill="none" stroke="#05060a" stroke-width="3" opacity="0.9" /> <!-- Cassini Division Line -->
+
+    <!-- Planet Globe -->
+    <circle cx="0" cy="0" r="82" fill="url(#globeGrad)" />
+    
+    <!-- Atmospheric Bands -->
+    <path d="M -80 -15 Q 0 -5 80 -15" stroke="#926725" stroke-width="7" opacity="0.35" fill="none" />
+    <path d="M -81 12 Q 0 22 81 12" stroke="#684715" stroke-width="6" opacity="0.4" fill="none" />
+    <path d="M -77 35 Q 0 44 77 35" stroke="#4a300a" stroke-width="5" opacity="0.35" fill="none" />
+    <!-- Globe shadow on back ring -->
+    <path d="M 0 -82 A 82 82 0 0 1 82 0 L 140 0 L 130 -60 Z" fill="#000000" opacity="0.6" />
+
+    <!-- Front portion of ring (clips across front of globe) -->
+    <path d="M -240 0 C -240 45, -120 70, 0 70 C 120 70, 240 45, 240 0 C 230 18, 140 38, 0 38 C -140 38, -230 18, -240 0 Z" 
+          fill="url(#ringGrad)" opacity="0.95" />
+    <!-- Ring shadow on globe -->
+    <path d="M -78 -20 Q 0 -12 78 -20 L 75 -12 Q 0 -4 -75 -12 Z" fill="#030305" opacity="0.75" />
+  </g>
+
+  <!-- Handheld Sensor Viewfinder UI -->
+  <g stroke="#00f0ff" stroke-opacity="0.3" fill="none" stroke-width="1">
+    <!-- Center Framing Guides -->
+    <path d="M 520 400 L 560 400 M 640 400 L 680 400" />
+    <path d="M 600 320 L 600 360 M 600 440 L 600 480" />
+    <!-- Viewfinder Corners -->
+    <path d="M 60 60 L 90 60 M 60 60 L 60 90" />
+    <path d="M 1140 60 L 1110 60 M 1140 60 L 1140 90" />
+    <path d="M 60 740 L 90 740 M 60 740 L 60 710" />
+    <path d="M 1140 740 L 1110 740 M 1140 740 L 1140 710" />
+  </g>
+
+  <!-- On-Screen Telemetry HUD -->
+  <g fill="#00f0ff" opacity="0.85" font-size="12" letter-spacing="1.5">
+    <text x="70" y="85">SENSOR: SONY IMX989 1-INCH</text>
+    <text x="70" y="105">OPTICS: 230mm EQUIV + 10x PERISCOPE</text>
+    <text x="70" y="125">EXPOSURE: 1/15s · ISO 800 · F/2.8</text>
+    
+    <text x="1130" y="85" text-anchor="end">TARGET: SATURN (🪐)</text>
+    <text x="1130" y="105" text-anchor="end">DIST: 9.53 AU · 79.2 MIN LIGHT-TIME</text>
+    <text x="1130" y="125" text-anchor="end">MODE: RAW SENSOR CAPTURE</text>
+  </g>
+</svg>
+

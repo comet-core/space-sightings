@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%" style="background:#050302;font-family:monospace;">
+  <defs>
+    <!-- Solar Flare / Sunset Glow -->
+    <radialGradient id="solarCorona" cx="50%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#fffbeb" stop-opacity="0.95" />
+      <stop offset="25%" stop-color="#fef08a" stop-opacity="0.75" />
+      <stop offset="55%" stop-color="#f97316" stop-opacity="0.3" />
+      <stop offset="85%" stop-color="#7c2d12" stop-opacity="0.1" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Solar Photosphere with Limb Darkening -->
+    <radialGradient id="photosphere" cx="48%" cy="48%" r="52%">
+      <stop offset="0%" stop-color="#fffbeb" />
+      <stop offset="45%" stop-color="#fde047" />
+      <stop offset="70%" stop-color="#f59e0b" />
+      <stop offset="88%" stop-color="#ea580c" />
+      <stop offset="97%" stop-color="#9a3412" />
+      <stop offset="100%" stop-color="#451a03" />
+    </radialGradient>
+
+    <clipPath id="solarDiscClip">
+      <circle cx="600" cy="400" r="230" />
+    </clipPath>
+  </defs>
+
+  <!-- Deep dusk atmosphere -->
+  <rect width="1200" height="800" fill="#080302" />
+
+  <!-- Solar Corona / Glow -->
+  <circle cx="600" cy="400" r="380" fill="url(#solarCorona)" />
+
+  <!-- Solar Photosphere Disc -->
+  <circle cx="600" cy="400" r="230" fill="url(#photosphere)" />
+
+  <!-- Sunspot Active Regions (AR3664 & AR3668) with Umbra + Penumbra -->
+  <g clip-path="url(#solarDiscClip)">
+    <!-- Granulation Texture hint -->
+    <circle cx="600" cy="400" r="230" fill="none" stroke="#ca8a04" stroke-width="2" opacity="0.15" />
+
+    <!-- Active Region AR3664 (Complex Delta Sunspot Group) -->
+    <g transform="translate(640, 430)">
+      <!-- Penumbra (Grey-brown magnetic filaments) -->
+      <path d="M -30 -15 Q -10 -25 25 -15 Q 40 5 25 22 Q -5 28 -32 15 Z" fill="#78350f" opacity="0.8" />
+      <!-- Umbrae (Dark cores) -->
+      <ellipse cx="-16" cy="-2" rx="7" ry="5" fill="#1c0b02" />
+      <ellipse cx="2" cy="4" rx="9" ry="6" fill="#1c0b02" />
+      <ellipse cx="18" cy="-4" rx="6" ry="4" fill="#1c0b02" />
+      <circle cx="28" cy="8" r="3" fill="#1c0b02" />
+      <circle cx="-6" cy="-10" r="2.5" fill="#1c0b02" />
+    </g>
+
+    <!-- AR3668 (Bipolar Group near limb) -->
+    <g transform="translate(470, 340)">
+      <ellipse cx="0" cy="0" rx="14" ry="10" fill="#78350f" opacity="0.75" />
+      <ellipse cx="-3" cy="0" rx="6" ry="4" fill="#1c0b02" />
+      <ellipse cx="20" cy="8" rx="9" ry="7" fill="#78350f" opacity="0.75" />
+      <circle cx="20" cy="8" r="3.5" fill="#1c0b02" />
+    </g>
+
+    <!-- Faint isolated sunspot -->
+    <g transform="translate(710, 310)">
+      <circle cx="0" cy="0" r="6" fill="#78350f" opacity="0.7" />
+      <circle cx="0" cy="0" r="2.5" fill="#1c0b02" />
+    </g>
+  </g>
+
+  <!-- Sunspot Annotation Labels & Reticle Targets -->
+  <g stroke="#00f0ff" stroke-width="0.8" opacity="0.85">
+    <!-- AR3664 Pointer -->
+    <circle cx="640" cy="430" r="28" fill="none" stroke-dasharray="3,3" />
+    <line x1="668" y1="430" x2="740" y2="430" />
+    <line x1="740" y1="430" x2="770" y2="400" />
+    <!-- AR3668 Pointer -->
+    <circle cx="480" cy="345" r="20" fill="none" stroke-dasharray="3,3" />
+    <line x1="460" y1="345" x2="380" y2="345" />
+    <line x1="380" y1="345" x2="350" y2="320" />
+  </g>
+
+  <g fill="#00f0ff" font-size="11" letter-spacing="1">
+    <text x="780" y="398">ACTIVE REGION AR3664 (COMPLEX DELTA)</text>
+    <text x="780" y="415" fill="#94a3b8">FLARE RISK: X-CLASS 35%</text>
+
+    <text x="340" y="318" text-anchor="end">ACTIVE REGION AR3668</text>
+    <text x="340" y="335" text-anchor="end" fill="#94a3b8">BIPOLAR CONFIGURATION</text>
+  </g>
+
+  <!-- Camera HUD -->
+  <g stroke="#00f0ff" stroke-opacity="0.3" fill="none" stroke-width="1">
+    <path d="M 60 60 L 90 60 M 60 60 L 60 90" />
+    <path d="M 1140 60 L 1110 60 M 1140 60 L 1140 90" />
+    <path d="M 60 740 L 90 740 M 60 740 L 60 710" />
+    <path d="M 1140 740 L 1110 740 M 1140 740 L 1140 710" />
+  </g>
+
+  <!-- Telemetry Overlay -->
+  <g fill="#00f0ff" opacity="0.85" font-size="12" letter-spacing="1.5">
+    <text x="70" y="85">TARGET: SOL (G2V YELLOW DWARF STAR)</text>
+    <text x="70" y="105">FILTER: BAADER SOLAR SAFETY ND5.0 + POLARIZER</text>
+    <text x="70" y="125">EXPOSURE: 1/2000s · ISO 50 · DIRECT CAPTURE</text>
+    
+    <text x="1130" y="85" text-anchor="end">DIST: 1.000 AU (149,597,870 KM)</text>
+    <text x="1130" y="105" text-anchor="end">LIGHT TRAVEL: 8.32 MINUTES</text>
+    <text x="1130" y="125" text-anchor="end">APP MAG: -26.74 · SUNSPOT CYCLE 25</text>
+  </g>
+</svg>
+

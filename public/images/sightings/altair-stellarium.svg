@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%" style="background:#020611;font-family:monospace;">
+  <defs>
+    <radialGradient id="skyGradAltair" cx="50%" cy="50%" r="75%">
+      <stop offset="0%" stop-color="#081026" />
+      <stop offset="70%" stop-color="#030814" />
+      <stop offset="100%" stop-color="#010307" />
+    </radialGradient>
+    <filter id="neonGlowAltair" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="800" fill="url(#skyGradAltair)" />
+
+  <!-- Equatorial Coordinate Grid Lines -->
+  <g stroke="#1e293b" stroke-width="1" stroke-dasharray="4,6">
+    <line x1="0" y1="200" x2="1200" y2="200" />
+    <line x1="0" y1="400" x2="1200" y2="400" />
+    <line x1="0" y1="600" x2="1200" y2="600" />
+    <line x1="300" y1="0" x2="300" y2="800" />
+    <line x1="600" y1="0" x2="600" y2="800" />
+    <line x1="900" y1="0" x2="900" y2="800" />
+  </g>
+
+  <!-- Coordinate Grid Labels -->
+  <g fill="#475569" font-size="11">
+    <text x="15" y="195">DEC +11°00'00"</text>
+    <text x="15" y="395">DEC +08°52'06"</text>
+    <text x="15" y="595">DEC +06°00'00"</text>
+    <text x="305" y="30">RA 19h 40m</text>
+    <text x="605" y="30">RA 19h 50m 47s</text>
+    <text x="905" y="30">RA 20h 02m</text>
+  </g>
+
+  <!-- Constellation Aquila (Eagle) Stick Lines -->
+  <g stroke="#3b82f6" stroke-opacity="0.5" stroke-width="1.5" stroke-dasharray="4,4">
+    <!-- Neck line Tarazed - Altair - Alshain -->
+    <line x1="480" y1="270" x2="600" y2="400" />
+    <line x1="600" y1="400" x2="720" y2="530" />
+    <!-- Wings & Body of Aquila -->
+    <line x1="600" y1="400" x2="380" y2="480" />
+    <line x1="380" y1="480" x2="250" y2="580" />
+    <line x1="600" y1="400" x2="820" y2="350" />
+    <line x1="820" y1="350" x2="980" y2="310" />
+    <line x1="720" y1="530" x2="640" y2="680" />
+  </g>
+
+  <!-- Summer Triangle Reference Pointer Lines -->
+  <g stroke="#f59e0b" stroke-opacity="0.35" stroke-width="1.2" stroke-dasharray="6,4">
+    <line x1="600" y1="400" x2="350" y2="80" />
+    <line x1="600" y1="400" x2="880" y2="100" />
+  </g>
+  <text x="360" y="95" fill="#f59e0b" font-size="10" opacity="0.8">TO VEGA (LYRA) ↑</text>
+  <text x="830" y="95" fill="#f59e0b" font-size="10" opacity="0.8">↑ TO DENEB (CYGNUS)</text>
+
+  <g fill="#38bdf8" font-size="14" font-weight="bold" letter-spacing="2" opacity="0.65">
+    <text x="580" y="340">AQUILA (THE EAGLE)</text>
+  </g>
+
+  <!-- Stars in Aquila -->
+  <!-- Tarazed (Gamma Aquilae) -->
+  <circle cx="480" cy="270" r="4.5" fill="#fed7aa" />
+  <text x="410" y="260" fill="#94a3b8" font-size="10">γ Aql (Tarazed)</text>
+
+  <!-- Alshain (Beta Aquilae) -->
+  <circle cx="720" cy="530" r="3.5" fill="#fef08a" />
+  <text x="735" y="535" fill="#94a3b8" font-size="10">β Aql (Alshain)</text>
+
+  <!-- Delta Aquilae -->
+  <circle cx="380" cy="480" r="3.0" fill="#bae6fd" />
+  <text x="320" y="495" fill="#94a3b8" font-size="10">δ Aql</text>
+
+  <!-- Zeta Aquilae -->
+  <circle cx="820" cy="350" r="3.2" fill="#bae6fd" />
+  <text x="835" y="355" fill="#94a3b8" font-size="10">ζ Aql</text>
+
+  <!-- Target Star: Altair Marker in Stellarium -->
+  <circle cx="600" cy="400" r="7" fill="#ffffff" />
+  <circle cx="600" cy="400" r="14" fill="none" stroke="#38bdf8" stroke-width="1.5" opacity="0.8" />
+  <text x="625" y="395" fill="#ffffff" font-size="13" font-weight="bold">α Aql (Altair)</text>
+
+  <!-- Stellarium Telrad Sight Reticle (Red Neon) -->
+  <g stroke="#ef4444" stroke-width="1.5" fill="none" filter="url(#neonGlowAltair)">
+    <circle cx="600" cy="400" r="45" stroke-dasharray="8,6" />
+    <circle cx="600" cy="400" r="140" stroke-dasharray="14,10" />
+    <circle cx="600" cy="400" r="260" stroke-dasharray="20,15" />
+    <line x1="600" y1="120" x2="600" y2="350" />
+    <line x1="600" y1="450" x2="600" y2="680" />
+    <line x1="320" y1="400" x2="550" y2="400" />
+    <line x1="650" y1="400" x2="880" y2="400" />
+    <circle cx="600" cy="400" r="2" fill="#ef4444" />
+  </g>
+
+  <!-- Telemetry Box -->
+  <rect x="50" y="50" width="380" height="150" fill="#030712" fill-opacity="0.85" stroke="#ef4444" stroke-width="1" rx="4" />
+  <g fill="#f87171" font-size="11" letter-spacing="1">
+    <text x="70" y="80" font-weight="bold" fill="#ffffff" font-size="13">STELLARIUM SKY MAP ALIGNMENT</text>
+    <text x="70" y="105">OBJECT: ALTAIR (HIP 97649 / α Aql)</text>
+    <text x="70" y="125">APP MAG: +0.76 · SPECTRAL: A7V</text>
+    <text x="70" y="145">COORDS: RA 19h 50m 47s · DEC +08°52'06"</text>
+    <text x="70" y="165">FOV: 4.0° TELRAD · ALT: +52°18' · AZ: 165°</text>
+    <text x="70" y="185" fill="#34d399">STATUS: EPHEMERIS MATCHED: 100%</text>
+  </g>
+
+  <text x="1140" y="760" fill="#ef4444" text-anchor="end" font-size="13" opacity="0.85">STELLARIUM RETICLE VERIFICATION OVERLAY</text>
+</svg>
+

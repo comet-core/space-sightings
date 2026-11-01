@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%" style="background:#02040a;font-family:monospace;">
+  <defs>
+    <!-- Deep Night Sky Background -->
+    <radialGradient id="skyBgAltair" cx="50%" cy="50%" r="75%">
+      <stop offset="0%" stop-color="#0a1226" />
+      <stop offset="60%" stop-color="#040813" />
+      <stop offset="100%" stop-color="#010206" />
+    </radialGradient>
+
+    <!-- Altair Brilliant Star Glow (A-Type White-Blue Star) -->
+    <radialGradient id="altairGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="1" />
+      <stop offset="15%" stop-color="#e0f2fe" stop-opacity="0.9" />
+      <stop offset="45%" stop-color="#38bdf8" stop-opacity="0.3" />
+      <stop offset="75%" stop-color="#0284c7" stop-opacity="0.08" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Tarazed (Gamma Aquilae) Orange Giant Glow -->
+    <radialGradient id="tarazedGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fed7aa" stop-opacity="0.95" />
+      <stop offset="40%" stop-color="#f97316" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Sky Canvas -->
+  <rect width="1200" height="800" fill="url(#skyBgAltair)" />
+
+  <!-- Milky Way Great Rift Faint Star Cloud Background -->
+  <g opacity="0.4">
+    <ellipse cx="600" cy="400" rx="550" ry="240" fill="#0f172a" opacity="0.5" transform="rotate(-35 600 400)" />
+    <!-- Background field stars -->
+    <circle cx="160" cy="180" r="1.1" fill="#ffffff" />
+    <circle cx="280" cy="620" r="0.9" fill="#e2e8f0" />
+    <circle cx="940" cy="190" r="1.2" fill="#ffffff" />
+    <circle cx="1060" cy="580" r="1.0" fill="#bae6fd" />
+    <circle cx="420" cy="220" r="0.8" fill="#ffffff" />
+    <circle cx="820" cy="640" r="1.3" fill="#ffffff" />
+    <circle cx="310" cy="380" r="1.0" fill="#ffffff" />
+    <circle cx="880" cy="280" r="0.9" fill="#fed7aa" />
+    <circle cx="510" cy="160" r="1.4" fill="#ffffff" />
+    <circle cx="690" cy="670" r="1.0" fill="#ffffff" />
+    <circle cx="750" cy="210" r="1.1" fill="#ffffff" />
+  </g>
+
+  <!-- Attendant Star: Tarazed (γ Aquilae - Mag +2.72 Orange Giant, NW of Altair) -->
+  <g transform="translate(480, 270)">
+    <circle cx="0" cy="0" r="45" fill="url(#tarazedGlow)" />
+    <circle cx="0" cy="0" r="5" fill="#ffedd5" />
+    <text x="16" y="5" fill="#fed7aa" font-size="11" letter-spacing="1">γ Aql (Tarazed)</text>
+    <text x="16" y="20" fill="#94a3b8" font-size="9">mag +2.72 · K3 II</text>
+  </g>
+
+  <!-- Attendant Star: Alshain (β Aquilae - Mag +3.71, SE of Altair) -->
+  <g transform="translate(720, 530)">
+    <circle cx="0" cy="0" r="25" fill="#38bdf8" fill-opacity="0.2" />
+    <circle cx="0" cy="0" r="3.5" fill="#fef08a" />
+    <text x="16" y="5" fill="#bae6fd" font-size="11" letter-spacing="1">β Aql (Alshain)</text>
+    <text x="16" y="20" fill="#94a3b8" font-size="9">mag +3.71 · G8 IV</text>
+  </g>
+
+  <!-- Alignment Line of the "Family of Aquila" (Tarazed - Altair - Alshain) -->
+  <line x1="480" y1="270" x2="720" y2="530" stroke="#00f0ff" stroke-width="0.8" stroke-dasharray="4,6" opacity="0.3" />
+
+  <!-- Primary Target: Altair (α Aquilae) at Center -->
+  <!-- Wide Atmospheric Halo -->
+  <circle cx="600" cy="400" r="180" fill="url(#altairGlow)" />
+
+  <!-- Star Core & Diffraction Spikes from Mobile Optical Lens -->
+  <g stroke="#e0f2fe" stroke-width="1" opacity="0.85">
+    <line x1="600" y1="260" x2="600" y2="540" />
+    <line x1="460" y1="400" x2="740" y2="400" />
+    <line x1="510" y1="310" x2="690" y2="490" stroke-width="0.5" opacity="0.5" />
+    <line x1="510" y1="490" x2="690" y2="310" stroke-width="0.5" opacity="0.5" />
+  </g>
+
+  <!-- Intense White Star Nucleus -->
+  <circle cx="600" cy="400" r="12" fill="#ffffff" />
+  <circle cx="600" cy="400" r="22" fill="#bae6fd" fill-opacity="0.6" />
+
+  <!-- Mobile Viewfinder HUD Overlays -->
+  <g stroke="#00f0ff" stroke-opacity="0.3" fill="none" stroke-width="1">
+    <path d="M 60 60 L 90 60 M 60 60 L 60 90" />
+    <path d="M 1140 60 L 1110 60 M 1140 60 L 1140 90" />
+    <path d="M 60 740 L 90 740 M 60 740 L 60 710" />
+    <path d="M 1140 740 L 1110 740 M 1140 740 L 1140 710" />
+    <!-- Center Framing Marks -->
+    <path d="M 540 400 L 570 400 M 630 400 L 660 400" />
+    <path d="M 600 340 L 600 370 M 600 430 L 600 460" />
+  </g>
+
+  <!-- On-Screen Telemetry HUD -->
+  <g fill="#00f0ff" opacity="0.85" font-size="12" letter-spacing="1.5">
+    <text x="70" y="85">TARGET: ALTAIR (α AQUILAE)</text>
+    <text x="70" y="105">OPTICS: 23mm EQUIV · HANDHELD MOBILE SENSOR</text>
+    <text x="70" y="125">EXPOSURE: 1/2s · ISO 1600 · BROADBAND RGB</text>
+    
+    <text x="1130" y="85" text-anchor="end">DIST: 16.73 LY (~1,058,000 AU)</text>
+    <text x="1130" y="105" text-anchor="end">LIGHT DELAY: 16.7 YEARS</text>
+    <text x="1130" y="125" text-anchor="end">APP MAG: +0.76 · AQUILA</text>
+  </g>
+</svg>
+

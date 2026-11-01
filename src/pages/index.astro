@@ -1,0 +1,52 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import ControlsBar from '../components/ControlsBar.astro';
+import SightingCard from '../components/SightingCard.astro';
+import TelemetryModal from '../components/TelemetryModal.astro';
+import { getCollection } from 'astro:content';
+
+// Query all sightings from the Content Collection
+const sightings = await getCollection('sightings');
+
+// Default sort: Scale Ladder Ascending (distanceAU)
+const sortedSightings = [...sightings].sort(
+  (a, b) => a.data.ephemeris.distanceAU - b.data.ephemeris.distanceAU
+);
+---
+
+<Layout title="CELESTIAL TELEMETRY ARCHIVE // Astrophotography & Ephemeris">
+  <main class="space-y-10">
+    <!-- Hero Header with Live Stats & Cosmic Scale Ladder -->
+    <Hero sightings={sightings} />
+
+    <!-- Main Catalog Archive Container -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+      <!-- Interactive Controls: Sector Filter, Sort Criteria, and Target Search -->
+      <ControlsBar />
+
+      <!-- Sighting Cards Grid -->
+      <div
+        id="sightings-grid"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2"
+      >
+        {sortedSightings.map((sighting) => (
+          <SightingCard sighting={sighting} />
+        ))}
+      </div>
+
+      <!-- Empty Results Notice (hidden by default) -->
+      <div
+        id="no-results-msg"
+        class="hidden py-16 text-center rounded-2xl border border-zinc-800 bg-zinc-950/60 font-mono"
+      >
+        <div class="text-zinc-500 text-sm">NO CELESTIAL TARGETS MATCHED YOUR FILTER QUERY</div>
+        <p class="text-zinc-600 text-xs mt-1">Adjust search parameters or select sector "ALL"</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Interactive Telemetry Modal Dialog -->
+  <TelemetryModal />
+</Layout>
+

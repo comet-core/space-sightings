@@ -1,0 +1,232 @@
+---
+import { SlidersHorizontal, ArrowUpDown, Search, Filter, Layers } from 'lucide-astro';
+---
+
+<div class="relative z-20 bg-zinc-950/80 border border-zinc-800/80 rounded-2xl p-4 sm:p-5 backdrop-blur-md shadow-xl">
+  <div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4">
+    <!-- Category Filter Buttons -->
+    <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+      <span class="text-xs font-mono text-zinc-500 uppercase tracking-wider flex items-center gap-1.5 mr-1">
+        <Filter class="w-3.5 h-3.5 text-cyan-400" />
+        <span class="hidden sm:inline">SECTOR:</span>
+      </span>
+
+      <button
+        type="button"
+        class="cat-filter-btn px-3 py-2 sm:py-1.5 min-h-[38px] sm:min-h-[32px] rounded-lg text-xs font-mono font-medium transition-all active:scale-95 bg-cyan-950/80 text-cyan-300 border border-cyan-500/60 shadow-glow-cyan"
+        data-cat="all"
+      >
+        ALL (5)
+      </button>
+
+      <button
+        type="button"
+        class="cat-filter-btn px-3 py-2 sm:py-1.5 min-h-[38px] sm:min-h-[32px] rounded-lg text-xs font-mono font-medium transition-all active:scale-95 bg-zinc-900/80 text-zinc-400 hover:text-zinc-200 border border-zinc-800 hover:border-zinc-700"
+        data-cat="solar-system"
+      >
+        🪐 SOLAR SYSTEM
+      </button>
+
+      <button
+        type="button"
+        class="cat-filter-btn px-3 py-2 sm:py-1.5 min-h-[38px] sm:min-h-[32px] rounded-lg text-xs font-mono font-medium transition-all active:scale-95 bg-zinc-900/80 text-zinc-400 hover:text-zinc-200 border border-zinc-800 hover:border-zinc-700"
+        data-cat="lunar"
+      >
+        🌙 LUNAR
+      </button>
+
+      <button
+        type="button"
+        class="cat-filter-btn px-3 py-2 sm:py-1.5 min-h-[38px] sm:min-h-[32px] rounded-lg text-xs font-mono font-medium transition-all active:scale-95 bg-zinc-900/80 text-zinc-400 hover:text-zinc-200 border border-zinc-800 hover:border-zinc-700"
+        data-cat="solar"
+      >
+        ☀️ SOLAR
+      </button>
+
+      <button
+        type="button"
+        class="cat-filter-btn px-3 py-2 sm:py-1.5 min-h-[38px] sm:min-h-[32px] rounded-lg text-xs font-mono font-medium transition-all active:scale-95 bg-zinc-900/80 text-zinc-400 hover:text-zinc-200 border border-zinc-800 hover:border-zinc-700"
+        data-cat="stellar"
+      >
+        ✨ STELLAR
+      </button>
+    </div>
+
+    <!-- Right Controls: Sort Mode & Search -->
+    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+      <!-- Search Input -->
+      <div class="relative flex-1 sm:w-56">
+        <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-zinc-500" />
+        <input
+          type="text"
+          id="target-search-input"
+          placeholder="Filter target, e.g. Saturn..."
+          class="w-full pl-9 pr-3 py-2 sm:py-1.5 min-h-[38px] sm:min-h-[32px] bg-zinc-900/90 border border-zinc-800 rounded-lg text-xs font-mono text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-cyan-500/80 focus:ring-1 focus:ring-cyan-500/40 transition-all"
+        />
+      </div>
+
+      <!-- Sort Mode Dropdown -->
+      <div class="flex items-center gap-2 bg-zinc-900/90 border border-zinc-800 rounded-lg px-2.5 py-1.5 min-h-[38px] sm:min-h-[32px] min-w-0">
+        <ArrowUpDown class="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+        <label for="sort-select" class="text-xs font-mono text-zinc-500 uppercase shrink-0">SORT:</label>
+        <select
+          id="sort-select"
+          class="bg-transparent text-xs font-mono text-zinc-200 focus:outline-none cursor-pointer pr-1 w-full min-w-0 truncate"
+        >
+          <option value="scale-asc" class="bg-zinc-900 text-zinc-200">Scale Ladder (Ascending: 0.0026 AU → 16.73 LY)</option>
+          <option value="scale-desc" class="bg-zinc-900 text-zinc-200">Scale Ladder (Descending: 16.73 LY → Earth)</option>
+          <option value="chrono-desc" class="bg-zinc-900 text-zinc-200">Chronological (Newest → Oldest)</option>
+          <option value="chrono-asc" class="bg-zinc-900 text-zinc-200">Chronological (Oldest → Newest)</option>
+          <option value="mag-asc" class="bg-zinc-900 text-zinc-200">Apparent Mag (Brightest → Faintest)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Telemetry Filter Active Status Bar -->
+  <div class="mt-3 pt-3 border-t border-zinc-800/60 flex items-center justify-between text-xs font-mono text-zinc-500">
+    <div class="flex items-center gap-2">
+      <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+      <span id="results-count-text">ARCHIVE STATUS: DISPLAYING ALL 5 CAPTURES</span>
+    </div>
+    <div class="hidden sm:flex items-center gap-4 text-[11px]">
+      <span class="text-zinc-600">SORT CRITERION:</span>
+      <span id="active-sort-label" class="text-cyan-400 font-medium">DISTANCE FROM EARTH (AU ASCENDING)</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Client-side filtering & sorting logic
+  function initializeControls() {
+    const grid = document.getElementById('sightings-grid');
+    if (!grid) return;
+
+    const cards = Array.from(grid.querySelectorAll('.sighting-card')) as HTMLElement[];
+    const catButtons = document.querySelectorAll('.cat-filter-btn');
+    const sortSelect = document.getElementById('sort-select') as HTMLSelectElement | null;
+    const searchInput = document.getElementById('target-search-input') as HTMLInputElement | null;
+    const resultsCountEl = document.getElementById('results-count-text');
+    const sortLabelEl = document.getElementById('active-sort-label');
+
+    let activeCategory = 'all';
+    let searchQuery = '';
+
+    // Check URL search parameters (e.g., /?cat=solar-system)
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialCat = urlParams.get('cat');
+    if (initialCat) {
+      activeCategory = initialCat;
+    }
+
+    function applyFilterAndSort() {
+      const sortMode = sortSelect ? sortSelect.value : 'scale-asc';
+      let visibleCount = 0;
+
+      // Filter cards
+      cards.forEach((card) => {
+        const cat = card.dataset.category || '';
+        const target = (card.dataset.target || '').toLowerCase();
+        const constellation = (card.dataset.constellation || '').toLowerCase();
+
+        const matchesCat = activeCategory === 'all' || cat === activeCategory;
+        const matchesSearch = !searchQuery || target.includes(searchQuery) || constellation.includes(searchQuery);
+
+        if (matchesCat && matchesSearch) {
+          card.classList.remove('hidden');
+          card.style.display = 'flex';
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+          card.style.display = 'none';
+        }
+      });
+
+      // Sort cards
+      const visibleCards = cards.filter((c) => !c.classList.contains('hidden'));
+
+      visibleCards.sort((a, b) => {
+        const distA = parseFloat(a.dataset.distance || '0');
+        const distB = parseFloat(b.dataset.distance || '0');
+        const timeA = parseInt(a.dataset.timestamp || '0', 10);
+        const timeB = parseInt(b.dataset.timestamp || '0', 10);
+        const magA = parseFloat(a.dataset.magnitude || '0');
+        const magB = parseFloat(b.dataset.magnitude || '0');
+
+        switch (sortMode) {
+          case 'scale-asc':
+            return distA - distB;
+          case 'scale-desc':
+            return distB - distA;
+          case 'chrono-desc':
+            return timeB - timeA;
+          case 'chrono-asc':
+            return timeA - timeB;
+          case 'mag-asc':
+            return magA - magB; // lower magnitude = brighter
+          default:
+            return distA - distB;
+        }
+      });
+
+      // Re-append sorted cards in order
+      visibleCards.forEach((card) => grid.appendChild(card));
+
+      // Update feedback count
+      if (resultsCountEl) {
+        resultsCountEl.textContent = `ARCHIVE STATUS: DISPLAYING ${visibleCount} OF ${cards.length} TARGETS`;
+      }
+
+      // Update active sort label
+      if (sortLabelEl && sortSelect) {
+        const selectedOption = sortSelect.options[sortSelect.selectedIndex];
+        sortLabelEl.textContent = selectedOption ? selectedOption.text.toUpperCase() : '';
+      }
+    }
+
+    // Category button click handlers
+    catButtons.forEach((btn) => {
+      const cat = btn.getAttribute('data-cat') || 'all';
+
+      // Set initial active button if matching initialCat
+      if (cat === activeCategory) {
+        btn.classList.add('bg-cyan-950/80', 'text-cyan-300', 'border-cyan-500/60', 'shadow-glow-cyan');
+        btn.classList.remove('bg-zinc-900/80', 'text-zinc-400');
+      }
+
+      btn.addEventListener('click', () => {
+        activeCategory = cat;
+
+        catButtons.forEach((b) => {
+          b.classList.remove('bg-cyan-950/80', 'text-cyan-300', 'border-cyan-500/60', 'shadow-glow-cyan');
+          b.classList.add('bg-zinc-900/80', 'text-zinc-400');
+        });
+
+        btn.classList.add('bg-cyan-950/80', 'text-cyan-300', 'border-cyan-500/60', 'shadow-glow-cyan');
+        btn.classList.remove('bg-zinc-900/80', 'text-zinc-400');
+
+        applyFilterAndSort();
+      });
+    });
+
+    // Sort select handler
+    sortSelect?.addEventListener('change', applyFilterAndSort);
+
+    // Search input handler
+    searchInput?.addEventListener('input', (e) => {
+      searchQuery = (e.target as HTMLInputElement).value.trim().toLowerCase();
+      applyFilterAndSort();
+    });
+
+    // Run initial filter and sort
+    applyFilterAndSort();
+  }
+
+  // Run on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeControls);
+  } else {
+    initializeControls();
+  }
+</script>
+

@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%" style="background:#020611;font-family:monospace;">
+  <defs>
+    <radialGradient id="skyGradJup" cx="50%" cy="50%" r="75%">
+      <stop offset="0%" stop-color="#09132e" />
+      <stop offset="70%" stop-color="#030814" />
+      <stop offset="100%" stop-color="#010307" />
+    </radialGradient>
+    <filter id="neonGlowJup" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="800" fill="url(#skyGradJup)" />
+
+  <!-- Equatorial Coordinate Grid -->
+  <g stroke="#1e293b" stroke-width="1" stroke-dasharray="4,6">
+    <line x1="0" y1="200" x2="1200" y2="200" />
+    <line x1="0" y1="400" x2="1200" y2="400" />
+    <line x1="0" y1="600" x2="1200" y2="600" />
+    <line x1="300" y1="0" x2="300" y2="800" />
+    <line x1="600" y1="0" x2="600" y2="800" />
+    <line x1="900" y1="0" x2="900" y2="800" />
+  </g>
+
+  <g fill="#475569" font-size="11">
+    <text x="15" y="195">DEC +18°00'00"</text>
+    <text x="15" y="395">DEC +16°15'32"</text>
+    <text x="15" y="595">DEC +14°00'00"</text>
+    <text x="305" y="30">RA 04h 15m</text>
+    <text x="605" y="30">RA 04h 26m 12s</text>
+    <text x="905" y="30">RA 04h 38m</text>
+  </g>
+
+  <!-- Constellation Taurus Lines -->
+  <g stroke="#3b82f6" stroke-opacity="0.45" stroke-width="1.5" stroke-dasharray="4,4">
+    <!-- Hyades V-shape towards Aldebaran -->
+    <line x1="780" y1="460" x2="880" y2="350" />
+    <line x1="780" y1="460" x2="740" y2="580" />
+    <line x1="880" y1="350" x2="1050" y2="280" />
+    <line x1="600" y1="400" x2="780" y2="460" stroke="#f59e0b" stroke-opacity="0.3" />
+  </g>
+
+  <g fill="#38bdf8" font-size="14" font-weight="bold" letter-spacing="2" opacity="0.6">
+    <text x="820" y="330">TAURUS</text>
+  </g>
+
+  <!-- Stars -->
+  <!-- Aldebaran (Alpha Tauri - Brilliant Orange Giant) -->
+  <circle cx="880" cy="350" r="5.5" fill="#fb923c" />
+  <circle cx="880" cy="350" r="12" fill="#fb923c" fill-opacity="0.2" />
+  <text x="895" y="355" fill="#fdba74" font-size="11" font-weight="bold">α Tau (Aldebaran)</text>
+
+  <!-- Ain (Epsilon Tauri) -->
+  <circle cx="780" cy="460" r="3.5" fill="#fef08a" />
+  <text x="710" y="465" fill="#94a3b8" font-size="10">ε Tau (Ain)</text>
+
+  <!-- Elnath -->
+  <circle cx="1050" cy="280" r="4.0" fill="#bae6fd" />
+  <text x="1065" y="285" fill="#94a3b8" font-size="10">β Tau (Elnath)</text>
+
+  <!-- Pleiades Cluster (M45) representation in upper left -->
+  <g transform="translate(180, 150)" opacity="0.8">
+    <circle cx="0" cy="0" r="2.5" fill="#bae6fd" />
+    <circle cx="12" cy="-6" r="2.8" fill="#bae6fd" />
+    <circle cx="18" cy="8" r="2.2" fill="#bae6fd" />
+    <circle cx="28" cy="4" r="2.6" fill="#bae6fd" />
+    <circle cx="36" cy="-2" r="2.0" fill="#bae6fd" />
+    <circle cx="-14" cy="4" r="2.4" fill="#bae6fd" />
+    <circle cx="8" cy="2" r="22" fill="#38bdf8" fill-opacity="0.12" />
+    <text x="-20" y="-14" fill="#7dd3fc" font-size="10" letter-spacing="1">M45 PLEIADES</text>
+  </g>
+
+  <!-- Jupiter Marker with Galilean Moon positions -->
+  <circle cx="600" cy="400" r="9" fill="#fef08a" />
+  <circle cx="600" cy="400" r="16" fill="none" stroke="#fef08a" stroke-width="1.5" opacity="0.8" />
+  <circle cx="560" cy="400" r="2.5" fill="#ffffff" />
+  <circle cx="580" cy="400" r="2.5" fill="#ffffff" />
+  <circle cx="620" cy="400" r="2.5" fill="#ffffff" />
+  <circle cx="645" cy="400" r="2.5" fill="#ffffff" />
+
+  <!-- Stellarium Telrad Sight Reticle -->
+  <g stroke="#ef4444" stroke-width="1.5" fill="none" filter="url(#neonGlowJup)">
+    <circle cx="600" cy="400" r="45" stroke-dasharray="8,6" />
+    <circle cx="600" cy="400" r="140" stroke-dasharray="14,10" />
+    <circle cx="600" cy="400" r="260" stroke-dasharray="20,15" />
+    <line x1="600" y1="120" x2="600" y2="350" />
+    <line x1="600" y1="450" x2="600" y2="680" />
+    <line x1="320" y1="400" x2="550" y2="400" />
+    <line x1="650" y1="400" x2="880" y2="400" />
+    <circle cx="600" cy="400" r="2" fill="#ef4444" />
+  </g>
+
+  <!-- Telemetry Box -->
+  <rect x="50" y="50" width="370" height="150" fill="#030712" fill-opacity="0.85" stroke="#ef4444" stroke-width="1" rx="4" />
+  <g fill="#f87171" font-size="11" letter-spacing="1">
+    <text x="70" y="80" font-weight="bold" fill="#ffffff" font-size="13">STELLARIUM SKY MAP ALIGNMENT</text>
+    <text x="70" y="105">OBJECT: JUPITER (♃) + MOONS</text>
+    <text x="70" y="125">APP MAG: -2.48 · PHASE: 99.1%</text>
+    <text x="70" y="145">COORDS: RA 04h 26m 12s · DEC +16°15'32"</text>
+    <text x="70" y="165">FOV: 4.0° TELRAD · ALT: +58°40' · AZ: 198°</text>
+    <text x="70" y="185" fill="#34d399">STATUS: SOLVED &amp; VERIFIED</text>
+  </g>
+
+  <text x="1140" y="760" fill="#ef4444" text-anchor="end" font-size="13" opacity="0.85">STELLARIUM RETICLE VERIFICATION OVERLAY</text>
+</svg>
+

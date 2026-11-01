@@ -1,0 +1,529 @@
+---
+import { X, Crosshair, ExternalLink, ShieldCheck, Camera, Compass, Radio, Clock, Orbit, Layers } from 'lucide-astro';
+---
+
+<dialog
+  id="telemetry-modal"
+  closedby="any"
+  aria-labelledby="modal-target-title"
+  class="m-auto rounded-2xl bg-zinc-950 border border-zinc-800 text-zinc-100 shadow-2xl backdrop:bg-black/85 backdrop:backdrop-blur-md max-w-5xl w-[96vw] sm:w-[92vw] max-h-[92dvh] overflow-hidden p-0"
+>
+  <!-- Modal Frame with Sci-Fi Header -->
+  <div class="flex flex-col h-full max-h-[92dvh]">
+    <!-- Top HUD Navigation Bar -->
+    <div class="px-4 sm:px-5 py-3 sm:py-3.5 border-b border-zinc-800/90 bg-zinc-900/90 flex items-center justify-between text-xs font-mono">
+      <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+        <div class="flex items-center gap-2 shrink-0">
+          <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse"></span>
+          <span class="text-zinc-400 font-semibold uppercase tracking-wider text-[11px] sm:text-xs">HUD READOUT</span>
+        </div>
+        <span class="text-zinc-600">|</span>
+        <span id="modal-category-badge" class="px-2 py-0.5 rounded border border-cyan-800/60 bg-cyan-950/40 text-cyan-300 font-medium text-[10px] sm:text-[11px] uppercase truncate">
+          SECTOR
+        </span>
+      </div>
+
+      <div class="flex items-center gap-2 shrink-0">
+        <a
+          id="modal-dossier-link"
+          href="#"
+          class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white border border-zinc-700 text-xs transition-colors min-h-[36px]"
+        >
+          <span class="hidden sm:inline">Dedicated Dossier</span>
+          <span class="sm:hidden">Dossier</span>
+          <ExternalLink class="w-3.5 h-3.5 text-cyan-400" />
+        </a>
+        <button
+          type="button"
+          id="close-modal-btn"
+          class="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg bg-zinc-800/80 hover:bg-zinc-700 text-zinc-400 hover:text-zinc-100 border border-zinc-700/80 transition-colors"
+          aria-label="Close telemetry modal"
+        >
+          <X class="w-4 h-4" />
+        </button>
+      </div>
+    </div>
+
+    <!-- Scrollable Modal Body -->
+    <div class="p-4 sm:p-6 overflow-y-auto space-y-4 sm:space-y-6 overscroll-contain">
+      <!-- Target Title & Headline -->
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-4 border-b border-zinc-800/80 pb-4">
+        <div>
+          <div class="text-[10px] sm:text-[11px] font-mono text-cyan-400 tracking-wider mb-1 flex items-center gap-2">
+            <span id="modal-epoch">TIMESTAMP: 2026-10-30 UTC</span>
+            <span class="text-zinc-600">·</span>
+            <span id="modal-station">STATION</span>
+          </div>
+          <h2 id="modal-target-title" class="text-xl sm:text-3xl font-extrabold font-mono text-zinc-100 tracking-tight flex flex-wrap items-center gap-2 sm:gap-3">
+            <span id="modal-target-name">TARGET NAME</span>
+            <span id="modal-phase-tag" class="text-xs font-normal text-zinc-400 bg-zinc-800/80 px-2 py-0.5 rounded border border-zinc-700"></span>
+          </h2>
+          <p id="modal-full-title" class="text-xs sm:text-sm text-zinc-400 font-sans mt-1">Full Observation Title</p>
+        </div>
+
+        <!-- High-Contrast Status Metrics -->
+        <div class="flex items-center gap-2 sm:gap-3 font-mono">
+          <div class="flex-1 sm:flex-initial px-3 py-1.5 sm:py-2 rounded-lg bg-zinc-900 border border-zinc-800 text-right">
+            <div class="text-[9px] sm:text-[10px] text-zinc-500 uppercase">APP MAG</div>
+            <div id="modal-magnitude" class="text-sm sm:text-base font-bold text-emerald-400">-2.48</div>
+          </div>
+          <div class="flex-1 sm:flex-initial px-3 py-1.5 sm:py-2 rounded-lg bg-zinc-900 border border-zinc-800 text-right">
+            <div class="text-[9px] sm:text-[10px] text-zinc-500 uppercase">DISTANCE</div>
+            <div id="modal-distance-au" class="text-sm sm:text-base font-bold text-cyan-400">4.21 AU</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Astrophotography Display Panel: RAW vs STELLARIUM vs BLEND -->
+      <div class="rounded-xl border border-zinc-800 bg-black overflow-hidden flex flex-col">
+        <!-- Visual Mode Switcher Tabs -->
+        <div class="px-3 sm:px-4 py-2.5 bg-zinc-900/90 border-b border-zinc-800 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 text-xs font-mono">
+          <div class="flex items-center justify-between sm:justify-start gap-2">
+            <span class="text-zinc-400 uppercase text-[10px] sm:text-[11px] shrink-0">OPTICAL:</span>
+            <div class="inline-flex rounded-lg p-0.5 bg-zinc-950 border border-zinc-800 flex-1 sm:flex-initial" role="tablist">
+              <button
+                type="button"
+                id="tab-raw"
+                role="tab"
+                aria-selected="true"
+                class="flex-1 sm:flex-initial px-2.5 sm:px-3 py-1.5 rounded-md text-cyan-400 font-medium bg-zinc-800 shadow-sm transition-all text-center text-xs min-h-[34px]"
+              >
+                <span class="hidden sm:inline">1. SENSOR </span>RAW
+              </button>
+              <button
+                type="button"
+                id="tab-stellarium"
+                role="tab"
+                aria-selected="false"
+                class="flex-1 sm:flex-initial px-2.5 sm:px-3 py-1.5 rounded-md text-zinc-400 hover:text-zinc-200 transition-all text-center text-xs min-h-[34px]"
+              >
+                <span class="hidden sm:inline">2. STELLARIUM </span>RETICLE
+              </button>
+              <button
+                type="button"
+                id="tab-blend"
+                role="tab"
+                aria-selected="false"
+                class="flex-1 sm:flex-initial px-2.5 sm:px-3 py-1.5 rounded-md text-zinc-400 hover:text-zinc-200 transition-all flex items-center justify-center gap-1.5 text-xs min-h-[34px]"
+              >
+                <Layers class="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                <span><span class="hidden sm:inline">3. DUAL </span>BLEND</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Blend Slider (visible when blend tab is selected or anytime) -->
+          <div id="blend-controls" class="hidden items-center justify-between sm:justify-start gap-2 bg-zinc-950 px-3 py-1.5 rounded-lg border border-zinc-800 w-full sm:w-auto">
+            <span class="text-[10px] text-zinc-400 shrink-0">RAW</span>
+            <input
+              type="range"
+              id="reticle-opacity-slider"
+              min="0"
+              max="100"
+              value="50"
+              class="flex-1 sm:w-32 accent-cyan-400 cursor-pointer h-2 bg-zinc-700 rounded-lg touch-none"
+              aria-label="Stellarium Reticle Opacity Blend"
+            />
+            <span class="text-[10px] text-red-400 font-bold shrink-0">RETICLE</span>
+            <span id="slider-pct" class="text-[10px] text-zinc-300 w-8 text-right font-bold shrink-0">50%</span>
+          </div>
+        </div>
+
+        <!-- Image Canvas Display -->
+        <div class="relative w-full aspect-[16/10] sm:aspect-[16/9] max-h-[520px] bg-black flex items-center justify-center overflow-hidden">
+          <!-- Raw Astrophotography Image -->
+          <img
+            id="modal-raw-img"
+            src=""
+            alt="Sensor Raw Astrophotography"
+            class="absolute inset-0 w-full h-full object-contain transition-opacity duration-300"
+          />
+
+          <!-- Stellarium Overlay Image -->
+          <img
+            id="modal-stellarium-img"
+            src=""
+            alt="Stellarium Reticle Alignment"
+            class="absolute inset-0 w-full h-full object-contain opacity-0 transition-opacity duration-300 pointer-events-none"
+          />
+
+          <!-- View HUD watermark stamp -->
+          <div class="absolute bottom-2.5 left-2.5 sm:bottom-3 sm:left-3 px-2 py-1 rounded bg-black/80 border border-zinc-800 text-[10px] font-mono text-zinc-400 flex items-center gap-1.5 backdrop-blur-sm pointer-events-none">
+            <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+            <span id="canvas-status-label">VIEW: RAW PHONE SENSOR CAPTURE</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Telemetry HUD Table -->
+      <div class="rounded-xl border border-zinc-800 bg-zinc-900/60 p-5 space-y-4">
+        <div class="flex items-center justify-between border-b border-zinc-800 pb-2">
+          <div class="flex items-center gap-2 text-xs font-mono font-bold text-zinc-200 tracking-wider">
+            <Crosshair class="w-4 h-4 text-cyan-400" />
+            <span>TELEMETRY HUD MATRIX</span>
+          </div>
+          <span class="text-[11px] font-mono text-emerald-400 flex items-center gap-1">
+            <ShieldCheck class="w-3.5 h-3.5" />
+            <span>EPHEMERIS VALIDATED</span>
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-mono">
+          <!-- Col 1: Orbital Distance & Light-Travel -->
+          <div class="p-3.5 rounded-lg bg-zinc-950/70 border border-zinc-800/80 space-y-2">
+            <div class="text-[10px] text-cyan-400 uppercase tracking-wider font-semibold flex items-center gap-1.5">
+              <Orbit class="w-3.5 h-3.5" />
+              <span>ORBITAL KINEMATICS</span>
+            </div>
+            <div class="space-y-1.5 text-zinc-300">
+              <div class="flex justify-between">
+                <span class="text-zinc-500">Distance:</span>
+                <span id="hud-distance-au" class="font-bold text-zinc-100 text-right">-</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-zinc-500">Distance (KM):</span>
+                <span id="hud-distance-km" class="text-zinc-300">-</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-zinc-500">Light Delay:</span>
+                <span id="hud-light-time" class="text-amber-400 font-bold">-</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-zinc-500">Constellation:</span>
+                <span id="hud-constellation" class="text-cyan-300">-</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Col 2: Optical Sensor & Exposure -->
+          <div class="p-3.5 rounded-lg bg-zinc-950/70 border border-zinc-800/80 space-y-2">
+            <div class="text-[10px] text-cyan-400 uppercase tracking-wider font-semibold flex items-center gap-1.5">
+              <Camera class="w-3.5 h-3.5" />
+              <span>SENSOR &amp; OPTICS</span>
+            </div>
+            <div class="space-y-1.5 text-zinc-300">
+              <div class="flex justify-between">
+                <span class="text-zinc-500">Device:</span>
+                <span id="hud-device" class="text-right text-zinc-100 max-w-[150px] truncate" title="">-</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-zinc-500">Focal Length:</span>
+                <span id="hud-focal" class="text-zinc-300">-</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-zinc-500">Exposure / ISO:</span>
+                <span id="hud-exposure" class="text-zinc-100 font-bold">-</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-zinc-500">Stacked Capture:</span>
+                <span id="hud-stacked" class="text-emerald-400 font-semibold">-</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Col 3: Sky Conditions & Site -->
+          <div class="p-3.5 rounded-lg bg-zinc-950/70 border border-zinc-800/80 space-y-2">
+            <div class="text-[10px] text-cyan-400 uppercase tracking-wider font-semibold flex items-center gap-1.5">
+              <Compass class="w-3.5 h-3.5" />
+              <span>ENVIRONMENT &amp; BORTLE</span>
+            </div>
+            <div class="space-y-1.5 text-zinc-300">
+              <div class="flex justify-between">
+                <span class="text-zinc-500">Bortle Scale:</span>
+                <span id="hud-bortle" class="font-bold text-zinc-100">-</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-zinc-500">Station Site:</span>
+                <span id="hud-location" class="text-right text-zinc-300 max-w-[150px] truncate" title="">-</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-zinc-500">Apparent Mag:</span>
+                <span id="hud-mag" class="text-emerald-400 font-bold">-</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-zinc-500">Illum Phase:</span>
+                <span id="hud-phase" class="text-zinc-300">-</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Monospace Observation Log Notes -->
+      <div class="rounded-xl border border-zinc-800 bg-zinc-950/80 p-4 font-mono text-xs">
+        <div class="text-zinc-400 font-semibold mb-2 flex items-center gap-2">
+          <span class="text-cyan-400">#</span>
+          <span>OBSERVATION NOTES &amp; FIELD LOG</span>
+        </div>
+        <p id="modal-notes" class="text-zinc-300 leading-relaxed font-sans bg-zinc-900/60 p-3 rounded border border-zinc-800/60">
+          -
+        </p>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<style>
+  /* Modern Web Guidance for <dialog> modal scrolling and backdrop containment */
+  dialog:modal {
+    overscroll-behavior: contain;
+  }
+
+  dialog::backdrop {
+    overflow: hidden;
+    overscroll-behavior: contain;
+    background-color: rgba(3, 4, 8, 0.85);
+    backdrop-filter: blur(8px);
+  }
+</style>
+
+<script>
+  import { formatDistanceAU, formatCompactDistance, formatDistanceKM, formatLightTravelTime, formatMagnitude, getBortleDescription, resolveImagePath, CATEGORY_META } from '../utils/telemetry';
+
+  const modal = document.getElementById('telemetry-modal') as HTMLDialogElement | null;
+  const closeBtn = document.getElementById('close-modal-btn');
+  const dossierLink = document.getElementById('modal-dossier-link') as HTMLAnchorElement | null;
+
+  // Image canvas elements
+  const rawImg = document.getElementById('modal-raw-img') as HTMLImageElement | null;
+  const stellariumImg = document.getElementById('modal-stellarium-img') as HTMLImageElement | null;
+  const canvasStatus = document.getElementById('canvas-status-label');
+
+  // Tabs & Blend controls
+  const tabRaw = document.getElementById('tab-raw');
+  const tabStellarium = document.getElementById('tab-stellarium');
+  const tabBlend = document.getElementById('tab-blend');
+  const blendControls = document.getElementById('blend-controls');
+  const opacitySlider = document.getElementById('reticle-opacity-slider') as HTMLInputElement | null;
+  const sliderPct = document.getElementById('slider-pct');
+
+  let currentSighting: any = null;
+
+  // Fallback for browsers without declarative closedby support (Modern Web Guidance)
+  if (modal && !('closedBy' in HTMLDialogElement.prototype)) {
+    modal.addEventListener('click', (event) => {
+      if (event.target !== modal) return;
+      const rect = modal.getBoundingClientRect();
+      const isDialogContent =
+        rect.top <= event.clientY &&
+        event.clientY <= rect.top + rect.height &&
+        rect.left <= event.clientX &&
+        event.clientX <= rect.left + rect.width;
+
+      if (!isDialogContent) {
+        modal.close();
+      }
+    });
+  }
+
+  // Close button listener
+  closeBtn?.addEventListener('click', () => {
+    modal?.close();
+  });
+
+  // Switch image views
+  function setViewMode(mode: 'raw' | 'stellarium' | 'blend') {
+    if (!rawImg || !stellariumImg) return;
+
+    // Reset tab active styling
+    [tabRaw, tabStellarium, tabBlend].forEach((tab) => {
+      tab?.classList.remove('bg-zinc-800', 'text-cyan-400', 'text-white', 'shadow-sm');
+      tab?.classList.add('text-zinc-400');
+      tab?.setAttribute('aria-selected', 'false');
+    });
+
+    if (mode === 'raw') {
+      tabRaw?.classList.add('bg-zinc-800', 'text-cyan-400', 'shadow-sm');
+      tabRaw?.setAttribute('aria-selected', 'true');
+      rawImg.style.opacity = '1';
+      stellariumImg.style.opacity = '0';
+      blendControls?.classList.add('hidden');
+      blendControls?.classList.remove('flex');
+      if (canvasStatus) canvasStatus.textContent = 'VIEW: RAW PHONE SENSOR CAPTURE';
+    } else if (mode === 'stellarium') {
+      tabStellarium?.classList.add('bg-zinc-800', 'text-cyan-400', 'shadow-sm');
+      tabStellarium?.setAttribute('aria-selected', 'true');
+      rawImg.style.opacity = '0';
+      stellariumImg.style.opacity = '1';
+      blendControls?.classList.add('hidden');
+      blendControls?.classList.remove('flex');
+      if (canvasStatus) canvasStatus.textContent = 'VIEW: STELLARIUM RETICLE SKY MAP';
+    } else if (mode === 'blend') {
+      tabBlend?.classList.add('bg-zinc-800', 'text-white', 'shadow-sm');
+      tabBlend?.setAttribute('aria-selected', 'true');
+      rawImg.style.opacity = '1';
+      const val = opacitySlider ? Number(opacitySlider.value) / 100 : 0.5;
+      stellariumImg.style.opacity = String(val);
+      blendControls?.classList.remove('hidden');
+      blendControls?.classList.add('flex');
+      if (canvasStatus) canvasStatus.textContent = `VIEW: DUAL BLEND OVERLAY (${Math.round(val * 100)}% RETICLE)`;
+    }
+  }
+
+  tabRaw?.addEventListener('click', () => setViewMode('raw'));
+  tabStellarium?.addEventListener('click', () => setViewMode('stellarium'));
+  tabBlend?.addEventListener('click', () => setViewMode('blend'));
+
+  // Slider change for dual blend
+  opacitySlider?.addEventListener('input', () => {
+    if (stellariumImg && opacitySlider) {
+      const pct = Number(opacitySlider.value);
+      stellariumImg.style.opacity = String(pct / 100);
+      if (sliderPct) sliderPct.textContent = `${pct}%`;
+      if (canvasStatus) canvasStatus.textContent = `VIEW: DUAL BLEND OVERLAY (${pct}% RETICLE)`;
+    }
+  });
+
+  // Function to open modal and populate data
+  window.openTelemetryModal = function (sightingData: any) {
+    if (!modal) return;
+    currentSighting = sightingData;
+
+    // Header & Target info
+    const targetNameEl = document.getElementById('modal-target-name');
+    const fullTitleEl = document.getElementById('modal-full-title');
+    const epochEl = document.getElementById('modal-epoch');
+    const stationEl = document.getElementById('modal-station');
+    const catBadge = document.getElementById('modal-category-badge');
+    const phaseTag = document.getElementById('modal-phase-tag');
+
+    if (targetNameEl) targetNameEl.textContent = sightingData.target;
+    if (fullTitleEl) fullTitleEl.textContent = sightingData.title;
+    if (epochEl) {
+      const d = new Date(sightingData.timestamp);
+      epochEl.textContent = `TIMESTAMP: ${d.toISOString().replace('T', ' ').substring(0, 19)} UTC`;
+    }
+    if (stationEl) stationEl.textContent = sightingData.location?.name || 'FIELD OBSERVATORY';
+
+    if (catBadge) {
+      const meta = CATEGORY_META[sightingData.category] || CATEGORY_META['solar-system'];
+      catBadge.textContent = `${meta.icon} ${meta.label}`;
+      catBadge.className = `px-2 py-0.5 rounded border text-[11px] font-medium uppercase ${meta.bg} ${meta.border} ${meta.color}`;
+    }
+
+    if (phaseTag) {
+      if (sightingData.ephemeris?.phasePercent !== undefined) {
+        phaseTag.textContent = `${sightingData.ephemeris.phasePercent}% Phase`;
+        phaseTag.classList.remove('hidden');
+      } else {
+        phaseTag.classList.add('hidden');
+      }
+    }
+
+    // Top Right Badges
+    const magEl = document.getElementById('modal-magnitude');
+    const distEl = document.getElementById('modal-distance-au');
+    if (magEl) magEl.textContent = formatMagnitude(sightingData.ephemeris.apparentMagnitude);
+    if (distEl) distEl.textContent = formatCompactDistance(sightingData.ephemeris.distanceAU);
+
+    // Images
+    const resolvedRaw = resolveImagePath(sightingData.rawImage);
+    const resolvedStellarium = resolveImagePath(sightingData.stellariumImage);
+
+    if (rawImg) {
+      rawImg.src = resolvedRaw;
+      if (sightingData.imagePosition) {
+        rawImg.style.objectPosition = sightingData.imagePosition;
+        rawImg.classList.remove('object-contain');
+        rawImg.classList.add('object-cover');
+      } else {
+        rawImg.style.objectPosition = '';
+        rawImg.classList.remove('object-cover');
+        rawImg.classList.add('object-contain');
+      }
+    }
+    if (stellariumImg) {
+      if (resolvedStellarium) {
+        stellariumImg.src = resolvedStellarium;
+        tabStellarium?.classList.remove('hidden');
+        tabBlend?.classList.remove('hidden');
+      } else {
+        stellariumImg.src = '';
+        tabStellarium?.classList.add('hidden');
+        tabBlend?.classList.add('hidden');
+      }
+    }
+
+    // Reset to raw view
+    setViewMode('raw');
+
+    // Telemetry Table values
+    const hudDistAu = document.getElementById('hud-distance-au');
+    const hudDistKm = document.getElementById('hud-distance-km');
+    const hudLightTime = document.getElementById('hud-light-time');
+    const hudConstellation = document.getElementById('hud-constellation');
+
+    if (hudDistAu) hudDistAu.textContent = formatDistanceAU(sightingData.ephemeris.distanceAU);
+    if (hudDistKm) {
+      hudDistKm.textContent = formatDistanceKM(sightingData.ephemeris.distanceAU);
+    }
+    if (hudLightTime) hudLightTime.textContent = formatLightTravelTime(sightingData.ephemeris.lightTravelTimeMinutes);
+    if (hudConstellation) hudConstellation.textContent = sightingData.ephemeris.constellation;
+
+    // Sensor table values
+    const hudDevice = document.getElementById('hud-device');
+    const hudFocal = document.getElementById('hud-focal');
+    const hudExposure = document.getElementById('hud-exposure');
+    const hudStacked = document.getElementById('hud-stacked');
+
+    if (hudDevice) {
+      hudDevice.textContent = sightingData.optics.device;
+      hudDevice.title = sightingData.optics.device;
+    }
+    if (hudFocal) hudFocal.textContent = sightingData.optics.focalLength;
+    if (hudExposure) hudExposure.textContent = `${sightingData.optics.exposure} · ISO ${sightingData.optics.iso}`;
+    if (hudStacked) {
+      hudStacked.textContent = sightingData.optics.stacked ? 'True (Multi-Frame Stack)' : 'False (Single Exposure)';
+      hudStacked.className = sightingData.optics.stacked ? 'text-emerald-400 font-semibold' : 'text-zinc-400';
+    }
+
+    // Environment table values
+    const hudBortle = document.getElementById('hud-bortle');
+    const hudLocation = document.getElementById('hud-location');
+    const hudMag = document.getElementById('hud-mag');
+    const hudPhase = document.getElementById('hud-phase');
+
+    if (hudBortle) {
+      const bDesc = getBortleDescription(sightingData.location.bortleClass);
+      hudBortle.textContent = bDesc.label;
+      hudBortle.className = `font-bold ${bDesc.color}`;
+    }
+    if (hudLocation) {
+      hudLocation.textContent = sightingData.location.name;
+      hudLocation.title = sightingData.location.name;
+    }
+    if (hudMag) hudMag.textContent = formatMagnitude(sightingData.ephemeris.apparentMagnitude);
+    if (hudPhase) {
+      hudPhase.textContent = sightingData.ephemeris.phasePercent !== undefined ? `${sightingData.ephemeris.phasePercent}%` : 'N/A';
+    }
+
+    // Notes
+    const notesEl = document.getElementById('modal-notes');
+    if (notesEl) notesEl.textContent = sightingData.notes;
+
+    // Dossier dedicated link
+    if (dossierLink) {
+      dossierLink.href = `/sightings/${sightingData.id}`;
+    }
+
+    // Modern Web Guidance: Always open modal dialogs with showModal()
+    modal.showModal();
+  };
+
+  // Wire up all "Inspect Telemetry" buttons across the page
+  document.querySelectorAll('.open-modal-btn').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      const target = e.currentTarget as HTMLElement;
+      const dataStr = target.getAttribute('data-sighting');
+      if (dataStr) {
+        try {
+          const data = JSON.parse(dataStr);
+          window.openTelemetryModal(data);
+        } catch (err) {
+          console.error('Failed to parse sighting data', err);
+        }
+      }
+    });
+  });
+</script>
+

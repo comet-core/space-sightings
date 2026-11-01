@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%" style="background:#03050c;font-family:monospace;">
+  <defs>
+    <!-- Sky Background -->
+    <radialGradient id="twilightSky" cx="60%" cy="40%" r="75%">
+      <stop offset="0%" stop-color="#090f21" />
+      <stop offset="50%" stop-color="#040712" />
+      <stop offset="100%" stop-color="#010206" />
+    </radialGradient>
+
+    <!-- Lunar Crescent Glow -->
+    <radialGradient id="lunarGlow" cx="66%" cy="40%" r="45%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.8" />
+      <stop offset="25%" stop-color="#bae6fd" stop-opacity="0.4" />
+      <stop offset="60%" stop-color="#38bdf8" stop-opacity="0.1" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Earthshine Glow on dark side of moon -->
+    <radialGradient id="earthshine" cx="45%" cy="45%" r="55%">
+      <stop offset="0%" stop-color="#1e293b" stop-opacity="0.9" />
+      <stop offset="70%" stop-color="#0f172a" stop-opacity="0.75" />
+      <stop offset="100%" stop-color="#020617" stop-opacity="0.5" />
+    </radialGradient>
+
+    <!-- Clip Path for the 18% Waxing Crescent -->
+    <mask id="crescentMask">
+      <!-- Full white circle -->
+      <circle cx="600" cy="400" r="210" fill="#ffffff" />
+      <!-- Black circle offset to carve out crescent -->
+      <ellipse cx="530" cy="400" rx="195" ry="210" fill="#000000" />
+    </mask>
+
+    <!-- Dark Disc for Earthshine -->
+    <clipPath id="fullDisc">
+      <circle cx="600" cy="400" r="210" />
+    </clipPath>
+  </defs>
+
+  <rect width="1200" height="800" fill="url(#twilightSky)" />
+
+  <!-- Lunar Corona Bloom -->
+  <circle cx="660" cy="400" r="290" fill="url(#lunarGlow)" />
+
+  <!-- Moon Dark Disc with Earthshine (Da Vinci Glow) -->
+  <g clip-path="url(#fullDisc)">
+    <circle cx="600" cy="400" r="210" fill="url(#earthshine)" />
+    <!-- Faint Lunar Maria silhouettes visible in Earthshine -->
+    <ellipse cx="560" cy="360" rx="45" ry="35" fill="#0b1120" opacity="0.8" /> <!-- Oceanus Procellarum hint -->
+    <ellipse cx="520" cy="410" rx="35" ry="30" fill="#0b1120" opacity="0.8" /> <!-- Mare Imbrium hint -->
+    <circle cx="580" cy="460" r="25" fill="#0b1120" opacity="0.8" /> <!-- Mare Humorum -->
+    <!-- Ghostly limb line -->
+    <circle cx="600" cy="400" r="209" fill="none" stroke="#38bdf8" stroke-width="0.75" opacity="0.25" />
+  </g>
+
+  <!-- Sunlit 18% Crescent -->
+  <g mask="url(#crescentMask)">
+    <circle cx="600" cy="400" r="210" fill="#f8fafc" />
+    
+    <!-- Maria inside the illuminated crescent (Mare Crisium, Mare Fecunditatis) -->
+    <ellipse cx="710" cy="350" rx="28" ry="22" fill="#cbd5e1" opacity="0.75" /> <!-- Mare Crisium -->
+    <ellipse cx="700" cy="430" rx="35" ry="25" fill="#cbd5e1" opacity="0.65" /> <!-- Mare Fecunditatis -->
+    
+    <!-- Terminator Crater Shadows (Rough texture along sunset line) -->
+    <g fill="#475569" opacity="0.8">
+      <circle cx="670" cy="270" r="6" />
+      <circle cx="674" cy="270" r="4" fill="#ffffff" />
+      <circle cx="682" cy="310" r="8" />
+      <circle cx="686" cy="310" r="5" fill="#ffffff" />
+      <circle cx="680" cy="380" r="9" />
+      <circle cx="685" cy="380" r="6" fill="#ffffff" />
+      <circle cx="675" cy="460" r="11" />
+      <circle cx="681" cy="460" r="7" fill="#ffffff" />
+      <circle cx="660" cy="520" r="8" />
+      <circle cx="664" cy="520" r="5" fill="#ffffff" />
+    </g>
+  </g>
+
+  <!-- Camera HUD & Crosshairs -->
+  <g stroke="#00f0ff" stroke-opacity="0.3" fill="none" stroke-width="1">
+    <path d="M 60 60 L 90 60 M 60 60 L 60 90" />
+    <path d="M 1140 60 L 1110 60 M 1140 60 L 1140 90" />
+    <path d="M 60 740 L 90 740 M 60 740 L 60 710" />
+    <path d="M 1140 740 L 1110 740 M 1140 740 L 1140 710" />
+    <circle cx="600" cy="400" r="12" stroke-dasharray="2,4" />
+  </g>
+
+  <!-- Telemetry Overlay -->
+  <g fill="#00f0ff" opacity="0.85" font-size="12" letter-spacing="1.5">
+    <text x="70" y="85">TARGET: WAXING CRESCENT (18.2% ILLUMINATED)</text>
+    <text x="70" y="105">OPTICS: 800mm F/10 SCHMIDT-CASSEGRAIN</text>
+    <text x="70" y="125">EXPOSURE: 1/80s · ISO 100 · HDR EARTHSHINE COMPOSITE</text>
+    
+    <text x="1130" y="85" text-anchor="end">DIST: 0.00257 AU (384,400 KM)</text>
+    <text x="1130" y="105" text-anchor="end">LIGHT TRAVEL: 1.28 SECONDS</text>
+    <text x="1130" y="125" text-anchor="end">APP MAG: -9.80 · AGE: 3.8 DAYS</text>
+  </g>
+</svg>
+
