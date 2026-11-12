@@ -26,6 +26,10 @@ export const sightingSchema = z.object({
   }),
   notes: z.string(),
   rawImage: z.string(),
+  rawImageLabel: z.string().optional(),
+  rawImageSecondary: z.string().optional(),
+  rawImageSecondaryLabel: z.string().optional(),
+  rawImageSecondaryPosition: z.string().optional(),
   stellariumImage: z.string().optional(),
   imagePosition: z.string().optional(),
 });

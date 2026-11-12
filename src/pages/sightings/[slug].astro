@@ -55,6 +55,7 @@ const kmDistance = Math.round(data.ephemeris.distanceAU * 149597870.7);
 const dateIso = new Date(data.timestamp).toISOString().replace('T', ' ').substring(0, 19) + ' UTC';
 
 const resolvedRawImage = resolveImagePath(data.rawImage);
+const resolvedRawImageSecondary = resolveImagePath(data.rawImageSecondary);
 const resolvedStellariumImage = resolveImagePath(data.stellariumImage);
 ---
 
@@ -143,15 +144,24 @@ const resolvedStellariumImage = resolveImagePath(data.stellariumImage);
               id="page-tab-raw"
               class="flex-1 sm:flex-initial px-2.5 sm:px-3 py-1.5 rounded-md text-cyan-400 font-medium bg-zinc-800 shadow-sm transition-all text-center text-xs min-h-[34px]"
             >
-              <span class="hidden sm:inline">1. SENSOR </span>RAW
+              <span class="hidden sm:inline">1. </span>{data.rawImageLabel ? 'FRAME A' : 'RAW SENSOR'}
             </button>
+            {resolvedRawImageSecondary && (
+              <button
+                type="button"
+                id="page-tab-secondary"
+                class="flex-1 sm:flex-initial px-2.5 sm:px-3 py-1.5 rounded-md text-zinc-400 hover:text-zinc-200 transition-all text-center text-xs min-h-[34px]"
+              >
+                <span class="hidden sm:inline">2. </span>{data.rawImageSecondaryLabel ? 'FRAME B' : 'FRAME B'}
+              </button>
+            )}
             {resolvedStellariumImage && (
               <button
                 type="button"
                 id="page-tab-stellarium"
                 class="flex-1 sm:flex-initial px-2.5 sm:px-3 py-1.5 rounded-md text-zinc-400 hover:text-zinc-200 transition-all text-center text-xs min-h-[34px]"
               >
-                <span class="hidden sm:inline">2. STELLARIUM </span>RETICLE
+                <span class="hidden sm:inline">3. </span>RETICLE
               </button>
             )}
             {resolvedStellariumImage && (
@@ -161,7 +171,7 @@ const resolvedStellariumImage = resolveImagePath(data.stellariumImage);
                 class="flex-1 sm:flex-initial px-2.5 sm:px-3 py-1.5 rounded-md text-zinc-400 hover:text-zinc-200 transition-all flex items-center justify-center gap-1.5 text-xs min-h-[34px]"
               >
                 <Layers class="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                <span><span class="hidden sm:inline">3. DUAL </span>BLEND</span>
+                <span><span class="hidden sm:inline">4. </span>BLEND</span>
               </button>
             )}
           </div>
@@ -188,7 +198,7 @@ const resolvedStellariumImage = resolveImagePath(data.stellariumImage);
 
       <!-- Main High-Res Image Display Canvas -->
       <div class="relative w-full aspect-[16/10] max-h-[640px] bg-black flex items-center justify-center overflow-hidden">
-        <!-- Sensor Raw Capture -->
+        <!-- Sensor Raw Capture (Frame A) -->
         <img
           id="page-raw-img"
           src={resolvedRawImage}
@@ -196,6 +206,17 @@ const resolvedStellariumImage = resolveImagePath(data.stellariumImage);
           class={`absolute inset-0 w-full h-full ${data.imagePosition ? 'object-cover' : 'object-contain'} transition-opacity duration-300`}
           style={data.imagePosition ? `object-position: ${data.imagePosition};` : undefined}
         />
+
+        <!-- Secondary Sensor Capture (Frame B) -->
+        {resolvedRawImageSecondary && (
+          <img
+            id="page-secondary-img"
+            src={resolvedRawImageSecondary}
+            alt={`Secondary Sensor Capture of ${data.target}`}
+            class="absolute inset-0 w-full h-full object-contain opacity-0 transition-opacity duration-300 pointer-events-none"
+            style={data.rawImageSecondaryPosition ? `object-position: ${data.rawImageSecondaryPosition};` : undefined}
+          />
+        )}
 
         <!-- Stellarium Alignment Reticle -->
         {resolvedStellariumImage && (
@@ -210,10 +231,76 @@ const resolvedStellariumImage = resolveImagePath(data.stellariumImage);
         <!-- Status Tag Watermark -->
         <div class="absolute bottom-4 left-4 px-3 py-1.5 rounded-lg bg-black/85 border border-zinc-800 text-xs font-mono text-zinc-300 flex items-center gap-2 backdrop-blur-md pointer-events-none">
           <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-          <span id="page-canvas-status">MODE: SENSOR RAW CAPTURE</span>
+          <span id="page-canvas-status">MODE: SENSOR RAW CAPTURE (FRAME A)</span>
         </div>
       </div>
     </div>
+
+    <!-- Multi-Frame Comparative Sensor Analysis Matrix (Rendered when 2 raw frames are available) -->
+    {resolvedRawImageSecondary && (
+      <section class="rounded-2xl border border-zinc-800 bg-zinc-950/80 p-5 sm:p-6 space-y-4">
+        <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
+          <div class="flex items-center gap-2 text-xs font-mono font-bold text-cyan-300 uppercase tracking-wider">
+            <Camera class="w-4 h-4 text-cyan-400" />
+            <span>MULTI-FRAME DUAL-EXPOSURE INSPECTION MATRIX</span>
+          </div>
+          <span class="text-[11px] font-mono text-amber-400 flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+            <span>2 DIRECT SENSOR ACQUISITIONS</span>
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <!-- Frame A Card -->
+          <div class="rounded-xl border border-zinc-800 bg-zinc-900/60 overflow-hidden flex flex-col">
+            <div class="px-4 py-2.5 bg-zinc-900/90 border-b border-zinc-800 flex items-center justify-between text-xs font-mono">
+              <span class="text-cyan-400 font-bold flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+                <span>{data.rawImageLabel || 'FRAME A: OPTICAL CROP'}</span>
+              </span>
+              <span class="text-[10px] text-zinc-500 font-mono">RING EXTENSION</span>
+            </div>
+            <div class="relative aspect-video bg-black flex items-center justify-center p-3">
+              <img
+                src={resolvedRawImage}
+                alt="Saturn Frame A Observation"
+                class="max-h-full max-w-full object-contain"
+              />
+            </div>
+            <div class="p-3.5 text-xs font-mono text-zinc-300 border-t border-zinc-800/80 bg-zinc-950/70 space-y-1">
+              <div class="text-zinc-400 text-[11px] uppercase tracking-wider font-semibold">PHOTOMETRIC NOTE:</div>
+              <p class="text-zinc-300 leading-relaxed font-sans text-xs">
+                Face-on planetary geometry resolving the central disk and the lateral elongation of the A and B ring ansae extending symmetrically across the equatorial axis.
+              </p>
+            </div>
+          </div>
+
+          <!-- Frame B Card -->
+          <div class="rounded-xl border border-zinc-800 bg-zinc-900/60 overflow-hidden flex flex-col">
+            <div class="px-4 py-2.5 bg-zinc-900/90 border-b border-zinc-800 flex items-center justify-between text-xs font-mono">
+              <span class="text-amber-400 font-bold flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                <span>{data.rawImageSecondaryLabel || 'FRAME B: HIGH-CONTRAST SILHOUETTE'}</span>
+              </span>
+              <span class="text-[10px] text-zinc-500 font-mono">KATANA CUT PROFILE</span>
+            </div>
+            <div class="relative aspect-video bg-black flex items-center justify-center p-3">
+              <img
+                src={resolvedRawImageSecondary}
+                alt="Saturn Frame B Observation"
+                class="max-h-full max-w-full object-contain"
+              />
+            </div>
+            <div class="p-3.5 text-xs font-mono text-zinc-300 border-t border-zinc-800/80 bg-zinc-950/70 space-y-1">
+              <div class="text-zinc-400 text-[11px] uppercase tracking-wider font-semibold">PHOTOMETRIC NOTE:</div>
+              <p class="text-zinc-300 leading-relaxed font-sans text-xs">
+                High-contrast silhouette exhibiting an acute diagonal limb cutoff across the upper hemisphere—produced by the shallow edge-on ring plane casting a razor-sharp shadow boundary.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    )}
 
     <!-- Telemetry HUD & Specifications Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 font-mono text-xs">
@@ -406,6 +493,7 @@ const resolvedStellariumImage = resolveImagePath(data.stellariumImage);
 <script>
   // Page dual-view viewer switcher logic
   const tabRaw = document.getElementById('page-tab-raw');
+  const tabSecondary = document.getElementById('page-tab-secondary');
   const tabStellarium = document.getElementById('page-tab-stellarium');
   const tabBlend = document.getElementById('page-tab-blend');
   const blendControls = document.getElementById('page-blend-controls');
@@ -413,27 +501,38 @@ const resolvedStellariumImage = resolveImagePath(data.stellariumImage);
   const sliderPct = document.getElementById('page-slider-pct');
 
   const rawImg = document.getElementById('page-raw-img');
+  const secondaryImg = document.getElementById('page-secondary-img');
   const stellariumImg = document.getElementById('page-stellarium-img');
   const statusLabel = document.getElementById('page-canvas-status');
 
-  function setPageMode(mode: 'raw' | 'stellarium' | 'blend') {
+  function setPageMode(mode: 'raw' | 'secondary' | 'stellarium' | 'blend') {
     if (!rawImg) return;
 
-    [tabRaw, tabStellarium, tabBlend].forEach((tab) => {
-      tab?.classList.remove('bg-zinc-800', 'text-cyan-400', 'text-white', 'shadow-sm');
+    [tabRaw, tabSecondary, tabStellarium, tabBlend].forEach((tab) => {
+      tab?.classList.remove('bg-zinc-800', 'text-cyan-400', 'text-amber-400', 'text-white', 'shadow-sm');
       tab?.classList.add('text-zinc-400');
     });
 
     if (mode === 'raw') {
       tabRaw?.classList.add('bg-zinc-800', 'text-cyan-400', 'shadow-sm');
       rawImg.style.opacity = '1';
+      if (secondaryImg) secondaryImg.style.opacity = '0';
       if (stellariumImg) stellariumImg.style.opacity = '0';
       blendControls?.classList.add('hidden');
       blendControls?.classList.remove('flex');
-      if (statusLabel) statusLabel.textContent = 'MODE: SENSOR RAW CAPTURE';
+      if (statusLabel) statusLabel.textContent = 'MODE: SENSOR RAW CAPTURE (FRAME A)';
+    } else if (mode === 'secondary' && secondaryImg) {
+      tabSecondary?.classList.add('bg-zinc-800', 'text-amber-400', 'shadow-sm');
+      rawImg.style.opacity = '0';
+      secondaryImg.style.opacity = '1';
+      if (stellariumImg) stellariumImg.style.opacity = '0';
+      blendControls?.classList.add('hidden');
+      blendControls?.classList.remove('flex');
+      if (statusLabel) statusLabel.textContent = 'MODE: SECONDARY SENSOR CAPTURE (FRAME B: KATANA CUT)';
     } else if (mode === 'stellarium' && stellariumImg) {
       tabStellarium?.classList.add('bg-zinc-800', 'text-cyan-400', 'shadow-sm');
       rawImg.style.opacity = '0';
+      if (secondaryImg) secondaryImg.style.opacity = '0';
       stellariumImg.style.opacity = '1';
       blendControls?.classList.add('hidden');
       blendControls?.classList.remove('flex');
@@ -441,6 +540,7 @@ const resolvedStellariumImage = resolveImagePath(data.stellariumImage);
     } else if (mode === 'blend' && stellariumImg) {
       tabBlend?.classList.add('bg-zinc-800', 'text-white', 'shadow-sm');
       rawImg.style.opacity = '1';
+      if (secondaryImg) secondaryImg.style.opacity = '0';
       const pct = slider ? Number(slider.value) / 100 : 0.5;
       stellariumImg.style.opacity = String(pct);
       blendControls?.classList.remove('hidden');
@@ -450,6 +550,7 @@ const resolvedStellariumImage = resolveImagePath(data.stellariumImage);
   }
 
   tabRaw?.addEventListener('click', () => setPageMode('raw'));
+  tabSecondary?.addEventListener('click', () => setPageMode('secondary'));
   tabStellarium?.addEventListener('click', () => setPageMode('stellarium'));
   tabBlend?.addEventListener('click', () => setPageMode('blend'));
 

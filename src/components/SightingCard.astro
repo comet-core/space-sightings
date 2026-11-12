@@ -13,6 +13,7 @@ const cat = CATEGORY_META[data.category] || CATEGORY_META['solar-system'];
 const dateFormatted = new Date(data.timestamp).toISOString().replace('T', ' ').substring(0, 16) + ' UTC';
 
 const resolvedRawImage = resolveImagePath(data.rawImage);
+const resolvedRawImageSecondary = resolveImagePath(data.rawImageSecondary);
 const resolvedStellariumImage = resolveImagePath(data.stellariumImage);
 
 // Format apparent magnitude string
@@ -65,6 +66,16 @@ const magString = data.ephemeris.apparentMagnitude > 0
       style={data.imagePosition ? `object-position: ${data.imagePosition};` : undefined}
     />
 
+    <!-- Secondary Raw Astrophotography Image (if available) -->
+    {resolvedRawImageSecondary && (
+      <img
+        src={resolvedRawImageSecondary}
+        alt={`Secondary capture of ${data.target}`}
+        loading="lazy"
+        class="card-secondary-image absolute inset-0 w-full h-full object-cover opacity-0 pointer-events-none transition-opacity duration-300"
+      />
+    )}
+
     <!-- Stellarium Reticle Image (Toggleable Overlay) -->
     {resolvedStellariumImage && (
       <img
@@ -89,16 +100,16 @@ const magString = data.ephemeris.apparentMagnitude > 0
       <div class="w-3 h-3 border-b-2 border-r-2 border-cyan-400/60"></div>
     </div>
 
-    <!-- Quick Reticle Preview Switch Button (if Stellarium overlay exists) -->
-    {data.stellariumImage && (
+    <!-- Quick Reticle Preview Switch Button (if Stellarium overlay or secondary photo exists) -->
+    {(data.stellariumImage || resolvedRawImageSecondary) && (
       <button
         type="button"
-        class="toggle-reticle-btn absolute bottom-3 right-3 z-10 px-2 py-1 rounded bg-zinc-950/85 hover:bg-red-950/90 text-zinc-300 hover:text-red-400 border border-zinc-700 hover:border-red-500/80 text-[10px] font-mono flex items-center gap-1.5 backdrop-blur-sm transition-all shadow-md active:scale-95"
-        title="Toggle Stellarium Sky Map Reticle"
-        aria-label={`Toggle Stellarium overlay for ${data.target}`}
+        class="toggle-reticle-btn absolute bottom-3 right-3 z-10 px-2 py-1 rounded bg-zinc-950/85 hover:bg-cyan-950/90 text-zinc-300 hover:text-cyan-300 border border-zinc-700 hover:border-cyan-500/80 text-[10px] font-mono flex items-center gap-1.5 backdrop-blur-sm transition-all shadow-md active:scale-95"
+        title="Cycle Observation Feeds"
+        aria-label={`Cycle feeds for ${data.target}`}
       >
-        <Crosshair class="w-3 h-3 text-red-400 animate-spin-slow" />
-        <span class="btn-label">RETICLE</span>
+        <Crosshair class="w-3 h-3 text-cyan-400 animate-spin-slow" />
+        <span class="btn-label">{resolvedRawImageSecondary ? 'FRAME B' : 'RETICLE'}</span>
       </button>
     )}
 
@@ -106,7 +117,9 @@ const magString = data.ephemeris.apparentMagnitude > 0
     <div class="absolute top-3 left-3 px-2 py-0.5 rounded bg-black/75 border border-zinc-700/60 text-zinc-400 text-[10px] font-mono tracking-wide backdrop-blur-sm pointer-events-none flex items-center gap-1">
       <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
       <span class="hidden sm:inline">SENSOR:</span>
-      <span class="text-zinc-200">{data.optics.stacked ? 'STACKED HDR' : 'SINGLE SHOT'}</span>
+      <span class={resolvedRawImageSecondary ? "text-amber-300 font-semibold" : "text-zinc-200"}>
+        {resolvedRawImageSecondary ? '2× MULTI-FRAME' : (data.optics.stacked ? 'STACKED HDR' : 'SINGLE SHOT')}
+      </span>
     </div>
   </div>
 
@@ -172,6 +185,9 @@ const magString = data.ephemeris.apparentMagnitude > 0
           optics: data.optics,
           notes: data.notes,
           rawImage: resolvedRawImage,
+          rawImageLabel: data.rawImageLabel,
+          rawImageSecondary: resolvedRawImageSecondary,
+          rawImageSecondaryLabel: data.rawImageSecondaryLabel,
           stellariumImage: resolvedStellariumImage,
           imagePosition: data.imagePosition,
         })}
@@ -194,29 +210,72 @@ const magString = data.ephemeris.apparentMagnitude > 0
 </article>
 
 <script>
-  // Add quick toggle functionality for card reticle previews
+  // Add multi-feed toggle functionality for card reticle previews
   document.querySelectorAll('.sighting-card').forEach((card) => {
     const toggleBtn = card.querySelector('.toggle-reticle-btn');
+    const rawImg = card.querySelector('.card-raw-image');
+    const secondaryImg = card.querySelector('.card-secondary-image');
     const reticleImg = card.querySelector('.card-reticle-image');
     const btnLabel = card.querySelector('.btn-label');
 
-    if (toggleBtn && reticleImg && btnLabel) {
-      let isReticleActive = false;
+    if (toggleBtn && btnLabel) {
+      let state = 0; // 0 = raw, 1 = secondary (if exists), 2 = reticle (if exists)
+
       toggleBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         e.preventDefault();
-        isReticleActive = !isReticleActive;
 
-        if (isReticleActive) {
+        const hasSecondary = !!secondaryImg;
+        const hasReticle = !!reticleImg;
+
+        // Determine next state
+        if (hasSecondary && hasReticle) {
+          state = (state + 1) % 3; // 0 -> 1 -> 2 -> 0
+        } else if (hasSecondary) {
+          state = state === 0 ? 1 : 0;
+        } else if (hasReticle) {
+          state = state === 0 ? 2 : 0;
+        }
+
+        // Apply visibility
+        if (state === 0) {
+          // Primary Raw
+          if (rawImg) rawImg.classList.remove('opacity-0');
+          if (secondaryImg) {
+            secondaryImg.classList.add('opacity-0', 'pointer-events-none');
+            secondaryImg.classList.remove('opacity-100');
+          }
+          if (reticleImg) {
+            reticleImg.classList.add('opacity-0', 'pointer-events-none');
+            reticleImg.classList.remove('opacity-100');
+          }
+          toggleBtn.classList.remove('bg-amber-900/80', 'bg-red-900/80', 'border-amber-400', 'border-red-400', 'text-amber-200', 'text-white');
+          toggleBtn.classList.add('bg-zinc-950/85', 'border-zinc-700', 'text-zinc-300');
+          btnLabel.textContent = hasSecondary ? 'FRAME B' : 'RETICLE';
+        } else if (state === 1 && secondaryImg) {
+          // Secondary Raw
+          if (rawImg) rawImg.classList.add('opacity-0');
+          secondaryImg.classList.remove('opacity-0', 'pointer-events-none');
+          secondaryImg.classList.add('opacity-100');
+          if (reticleImg) {
+            reticleImg.classList.add('opacity-0', 'pointer-events-none');
+            reticleImg.classList.remove('opacity-100');
+          }
+          toggleBtn.classList.remove('bg-zinc-950/85', 'bg-red-900/80', 'border-zinc-700', 'border-red-400');
+          toggleBtn.classList.add('bg-amber-900/80', 'border-amber-400', 'text-amber-200');
+          btnLabel.textContent = hasReticle ? 'RETICLE' : 'FRAME A';
+        } else if (state === 2 && reticleImg) {
+          // Stellarium Reticle
+          if (rawImg) rawImg.classList.add('opacity-0');
+          if (secondaryImg) {
+            secondaryImg.classList.add('opacity-0', 'pointer-events-none');
+            secondaryImg.classList.remove('opacity-100');
+          }
           reticleImg.classList.remove('opacity-0', 'pointer-events-none');
           reticleImg.classList.add('opacity-100');
+          toggleBtn.classList.remove('bg-zinc-950/85', 'bg-amber-900/80', 'border-zinc-700', 'border-amber-400', 'text-amber-200');
           toggleBtn.classList.add('bg-red-900/80', 'border-red-400', 'text-white');
-          btnLabel.textContent = 'RAW VIEW';
-        } else {
-          reticleImg.classList.remove('opacity-100');
-          reticleImg.classList.add('opacity-0', 'pointer-events-none');
-          toggleBtn.classList.remove('bg-red-900/80', 'border-red-400', 'text-white');
-          btnLabel.textContent = 'RETICLE';
+          btnLabel.textContent = 'FRAME A';
         }
       });
     }

@@ -88,7 +88,16 @@ import { X, Crosshair, ExternalLink, ShieldCheck, Camera, Compass, Radio, Clock,
                 aria-selected="true"
                 class="flex-1 sm:flex-initial px-2.5 sm:px-3 py-1.5 rounded-md text-cyan-400 font-medium bg-zinc-800 shadow-sm transition-all text-center text-xs min-h-[34px]"
               >
-                <span class="hidden sm:inline">1. SENSOR </span>RAW
+                <span class="hidden sm:inline">1. SENSOR </span><span id="tab-raw-label">RAW</span>
+              </button>
+              <button
+                type="button"
+                id="tab-raw-secondary"
+                role="tab"
+                aria-selected="false"
+                class="hidden flex-1 sm:flex-initial px-2.5 sm:px-3 py-1.5 rounded-md text-zinc-400 hover:text-zinc-200 transition-all text-center text-xs min-h-[34px]"
+              >
+                <span class="hidden sm:inline">2. SENSOR </span><span id="tab-raw-secondary-label">RAW B</span>
               </button>
               <button
                 type="button"
@@ -97,7 +106,7 @@ import { X, Crosshair, ExternalLink, ShieldCheck, Camera, Compass, Radio, Clock,
                 aria-selected="false"
                 class="flex-1 sm:flex-initial px-2.5 sm:px-3 py-1.5 rounded-md text-zinc-400 hover:text-zinc-200 transition-all text-center text-xs min-h-[34px]"
               >
-                <span class="hidden sm:inline">2. STELLARIUM </span>RETICLE
+                <span class="hidden sm:inline">3. STELLARIUM </span>RETICLE
               </button>
               <button
                 type="button"
@@ -131,12 +140,20 @@ import { X, Crosshair, ExternalLink, ShieldCheck, Camera, Compass, Radio, Clock,
 
         <!-- Image Canvas Display -->
         <div class="relative w-full aspect-[16/10] sm:aspect-[16/9] max-h-[520px] bg-black flex items-center justify-center overflow-hidden">
-          <!-- Raw Astrophotography Image -->
+          <!-- Raw Astrophotography Image (Primary) -->
           <img
             id="modal-raw-img"
             src=""
             alt="Sensor Raw Astrophotography"
             class="absolute inset-0 w-full h-full object-contain transition-opacity duration-300"
+          />
+
+          <!-- Raw Astrophotography Image (Secondary) -->
+          <img
+            id="modal-raw-secondary-img"
+            src=""
+            alt="Secondary Raw Astrophotography"
+            class="absolute inset-0 w-full h-full object-contain opacity-0 transition-opacity duration-300 pointer-events-none"
           />
 
           <!-- Stellarium Overlay Image -->
@@ -286,11 +303,15 @@ import { X, Crosshair, ExternalLink, ShieldCheck, Camera, Compass, Radio, Clock,
 
   // Image canvas elements
   const rawImg = document.getElementById('modal-raw-img') as HTMLImageElement | null;
+  const rawSecondaryImg = document.getElementById('modal-raw-secondary-img') as HTMLImageElement | null;
   const stellariumImg = document.getElementById('modal-stellarium-img') as HTMLImageElement | null;
   const canvasStatus = document.getElementById('canvas-status-label');
 
   // Tabs & Blend controls
   const tabRaw = document.getElementById('tab-raw');
+  const tabRawLabel = document.getElementById('tab-raw-label');
+  const tabRawSecondary = document.getElementById('tab-raw-secondary');
+  const tabRawSecondaryLabel = document.getElementById('tab-raw-secondary-label');
   const tabStellarium = document.getElementById('tab-stellarium');
   const tabBlend = document.getElementById('tab-blend');
   const blendControls = document.getElementById('blend-controls');
@@ -322,12 +343,12 @@ import { X, Crosshair, ExternalLink, ShieldCheck, Camera, Compass, Radio, Clock,
   });
 
   // Switch image views
-  function setViewMode(mode: 'raw' | 'stellarium' | 'blend') {
+  function setViewMode(mode: 'raw' | 'raw-secondary' | 'stellarium' | 'blend') {
     if (!rawImg || !stellariumImg) return;
 
     // Reset tab active styling
-    [tabRaw, tabStellarium, tabBlend].forEach((tab) => {
-      tab?.classList.remove('bg-zinc-800', 'text-cyan-400', 'text-white', 'shadow-sm');
+    [tabRaw, tabRawSecondary, tabStellarium, tabBlend].forEach((tab) => {
+      tab?.classList.remove('bg-zinc-800', 'text-cyan-400', 'text-amber-400', 'text-white', 'shadow-sm');
       tab?.classList.add('text-zinc-400');
       tab?.setAttribute('aria-selected', 'false');
     });
@@ -336,14 +357,25 @@ import { X, Crosshair, ExternalLink, ShieldCheck, Camera, Compass, Radio, Clock,
       tabRaw?.classList.add('bg-zinc-800', 'text-cyan-400', 'shadow-sm');
       tabRaw?.setAttribute('aria-selected', 'true');
       rawImg.style.opacity = '1';
+      if (rawSecondaryImg) rawSecondaryImg.style.opacity = '0';
       stellariumImg.style.opacity = '0';
       blendControls?.classList.add('hidden');
       blendControls?.classList.remove('flex');
-      if (canvasStatus) canvasStatus.textContent = 'VIEW: RAW PHONE SENSOR CAPTURE';
+      if (canvasStatus) canvasStatus.textContent = currentSighting?.rawImageLabel ? `VIEW: ${currentSighting.rawImageLabel.toUpperCase()}` : 'VIEW: RAW PHONE SENSOR CAPTURE (FRAME A)';
+    } else if (mode === 'raw-secondary' && rawSecondaryImg) {
+      tabRawSecondary?.classList.add('bg-zinc-800', 'text-amber-400', 'shadow-sm');
+      tabRawSecondary?.setAttribute('aria-selected', 'true');
+      rawImg.style.opacity = '0';
+      rawSecondaryImg.style.opacity = '1';
+      stellariumImg.style.opacity = '0';
+      blendControls?.classList.add('hidden');
+      blendControls?.classList.remove('flex');
+      if (canvasStatus) canvasStatus.textContent = currentSighting?.rawImageSecondaryLabel ? `VIEW: ${currentSighting.rawImageSecondaryLabel.toUpperCase()}` : 'VIEW: SECONDARY SENSOR CAPTURE (FRAME B)';
     } else if (mode === 'stellarium') {
       tabStellarium?.classList.add('bg-zinc-800', 'text-cyan-400', 'shadow-sm');
       tabStellarium?.setAttribute('aria-selected', 'true');
       rawImg.style.opacity = '0';
+      if (rawSecondaryImg) rawSecondaryImg.style.opacity = '0';
       stellariumImg.style.opacity = '1';
       blendControls?.classList.add('hidden');
       blendControls?.classList.remove('flex');
@@ -352,6 +384,7 @@ import { X, Crosshair, ExternalLink, ShieldCheck, Camera, Compass, Radio, Clock,
       tabBlend?.classList.add('bg-zinc-800', 'text-white', 'shadow-sm');
       tabBlend?.setAttribute('aria-selected', 'true');
       rawImg.style.opacity = '1';
+      if (rawSecondaryImg) rawSecondaryImg.style.opacity = '0';
       const val = opacitySlider ? Number(opacitySlider.value) / 100 : 0.5;
       stellariumImg.style.opacity = String(val);
       blendControls?.classList.remove('hidden');
@@ -361,6 +394,7 @@ import { X, Crosshair, ExternalLink, ShieldCheck, Camera, Compass, Radio, Clock,
   }
 
   tabRaw?.addEventListener('click', () => setViewMode('raw'));
+  tabRawSecondary?.addEventListener('click', () => setViewMode('raw-secondary'));
   tabStellarium?.addEventListener('click', () => setViewMode('stellarium'));
   tabBlend?.addEventListener('click', () => setViewMode('blend'));
 
@@ -418,6 +452,7 @@ import { X, Crosshair, ExternalLink, ShieldCheck, Camera, Compass, Radio, Clock,
 
     // Images
     const resolvedRaw = resolveImagePath(sightingData.rawImage);
+    const resolvedSecondary = resolveImagePath(sightingData.rawImageSecondary);
     const resolvedStellarium = resolveImagePath(sightingData.stellariumImage);
 
     if (rawImg) {
@@ -432,6 +467,24 @@ import { X, Crosshair, ExternalLink, ShieldCheck, Camera, Compass, Radio, Clock,
         rawImg.classList.add('object-contain');
       }
     }
+
+    if (tabRawLabel) {
+      tabRawLabel.textContent = sightingData.rawImageLabel ? 'RAW A' : 'RAW';
+    }
+
+    if (rawSecondaryImg && tabRawSecondary) {
+      if (resolvedSecondary) {
+        rawSecondaryImg.src = resolvedSecondary;
+        tabRawSecondary.classList.remove('hidden');
+        if (tabRawSecondaryLabel) {
+          tabRawSecondaryLabel.textContent = sightingData.rawImageSecondaryLabel ? 'RAW B' : 'RAW B';
+        }
+      } else {
+        rawSecondaryImg.src = '';
+        tabRawSecondary.classList.add('hidden');
+      }
+    }
+
     if (stellariumImg) {
       if (resolvedStellarium) {
         stellariumImg.src = resolvedStellarium;
