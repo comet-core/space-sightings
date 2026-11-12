@@ -16,6 +16,8 @@ export const sightingSchema = z.object({
     distanceAU: z.number(),
     lightTravelTimeMinutes: z.number(),
     phasePercent: z.number().optional(),
+    altitude: z.string().optional(),
+    azimuth: z.string().optional(),
   }),
   optics: z.object({
     device: z.string(),

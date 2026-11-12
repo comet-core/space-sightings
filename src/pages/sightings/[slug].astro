@@ -435,6 +435,18 @@ const resolvedStellariumImage = resolveImagePath(data.stellariumImage);
               {bortleInfo.label}
             </span>
           </div>
+          {data.ephemeris.altitude && (
+            <div class="flex justify-between items-baseline py-1 border-b border-zinc-900">
+              <span class="text-zinc-500">Target Altitude:</span>
+              <span class="text-cyan-300 font-bold">{data.ephemeris.altitude}</span>
+            </div>
+          )}
+          {data.ephemeris.azimuth && (
+            <div class="flex justify-between items-baseline py-1 border-b border-zinc-900">
+              <span class="text-zinc-500">Azimuth Angle:</span>
+              <span class="text-zinc-100 font-mono">{data.ephemeris.azimuth}</span>
+            </div>
+          )}
           <div class="flex justify-between items-baseline py-1 border-b border-zinc-900">
             <span class="text-zinc-500">Illumination Phase:</span>
             <span class="text-zinc-300">
