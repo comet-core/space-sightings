@@ -385,9 +385,9 @@ const resolvedStellariumImage = resolveImagePath(data.stellariumImage);
         </div>
 
         <div class="space-y-2.5 text-zinc-300">
-          <div class="flex justify-between items-baseline py-1 border-b border-zinc-900">
-            <span class="text-zinc-500">Capture Device:</span>
-            <span class="font-bold text-zinc-100 text-right max-w-[180px] truncate" title={data.optics.device}>
+          <div class="flex justify-between items-baseline py-1 border-b border-zinc-900 gap-2">
+            <span class="text-zinc-500 shrink-0">Capture Device:</span>
+            <span class="font-bold text-zinc-100 text-right break-words">
               {data.optics.device}
             </span>
           </div>
@@ -423,9 +423,9 @@ const resolvedStellariumImage = resolveImagePath(data.stellariumImage);
         </div>
 
         <div class="space-y-2.5 text-zinc-300">
-          <div class="flex justify-between items-baseline py-1 border-b border-zinc-900">
-            <span class="text-zinc-500">Site Location:</span>
-            <span class="font-bold text-zinc-100 text-right max-w-[180px] truncate" title={data.location.name}>
+          <div class="flex justify-between items-baseline py-1 border-b border-zinc-900 gap-2">
+            <span class="text-zinc-500 shrink-0">Site Location:</span>
+            <span class="font-bold text-zinc-100 text-right break-words">
               {data.location.name}
             </span>
           </div>
