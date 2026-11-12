@@ -239,65 +239,97 @@ const resolvedStellariumImage = resolveImagePath(data.stellariumImage);
     <!-- Multi-Frame Comparative Sensor Analysis Matrix (Rendered when 2 raw frames are available) -->
     {resolvedRawImageSecondary && (
       <section class="rounded-2xl border border-zinc-800 bg-zinc-950/80 p-5 sm:p-6 space-y-4">
-        <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-zinc-800 pb-3">
           <div class="flex items-center gap-2 text-xs font-mono font-bold text-cyan-300 uppercase tracking-wider">
             <Camera class="w-4 h-4 text-cyan-400" />
             <span>MULTI-FRAME DUAL-EXPOSURE INSPECTION MATRIX</span>
           </div>
-          <span class="text-[11px] font-mono text-amber-400 flex items-center gap-1.5">
+          <span class="text-[11px] font-mono text-amber-400 flex items-center gap-1.5 self-start sm:self-auto">
             <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
-            <span>2 DIRECT SENSOR ACQUISITIONS</span>
+            <span>2 SENSOR CAPTURES + STELLARIUM RETICLE</span>
           </span>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-          <!-- Frame A Card -->
-          <div class="rounded-xl border border-zinc-800 bg-zinc-900/60 overflow-hidden flex flex-col">
-            <div class="px-4 py-2.5 bg-zinc-900/90 border-b border-zinc-800 flex items-center justify-between text-xs font-mono">
-              <span class="text-cyan-400 font-bold flex items-center gap-1.5">
+        <div class={`grid grid-cols-1 ${resolvedStellariumImage ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-4`}>
+          <!-- Frame A Card (Priority Focused) -->
+          <div class="rounded-xl border border-cyan-500/40 bg-zinc-900/60 overflow-hidden flex flex-col shadow-glow-cyan">
+            <div class="px-3.5 py-2.5 bg-zinc-900/90 border-b border-zinc-800 flex items-center justify-between text-xs font-mono">
+              <span class="text-cyan-300 font-bold flex items-center gap-1.5">
                 <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
-                <span>{data.rawImageLabel || 'FRAME A: OPTICAL CROP'}</span>
+                <span>{data.rawImageLabel || "FRAME A: 'EARRINGS'"}</span>
               </span>
-              <span class="text-[10px] text-zinc-500 font-mono">RING EXTENSION</span>
+              <span class="text-[10px] text-cyan-400/90 px-1.5 py-0.5 rounded bg-cyan-950/80 border border-cyan-800/40 font-mono">PRIORITY FOCUS</span>
             </div>
-            <div class="relative aspect-video bg-black flex items-center justify-center p-3">
+            <div class="relative aspect-video bg-black flex items-center justify-center p-2">
               <img
                 src={resolvedRawImage}
                 alt="Saturn Frame A Observation"
                 class="max-h-full max-w-full object-contain"
               />
             </div>
-            <div class="p-3.5 text-xs font-mono text-zinc-300 border-t border-zinc-800/80 bg-zinc-950/70 space-y-1">
-              <div class="text-zinc-400 text-[11px] uppercase tracking-wider font-semibold">PHOTOMETRIC NOTE:</div>
+            <div class="p-3 text-xs font-mono text-zinc-300 border-t border-zinc-800/80 bg-zinc-950/70 space-y-1.5 flex-1 flex flex-col justify-between">
               <p class="text-zinc-300 leading-relaxed font-sans text-xs">
-                Face-on planetary geometry resolving the central disk and the lateral elongation of the A and B ring ansae extending symmetrically across the equatorial axis.
+                Face-on planetary geometry resolving the central disk and the characteristic lateral ring ansae extending like earrings symmetrically flanking the equatorial axis.
               </p>
+              <div class="text-[11px] text-zinc-500 font-mono pt-1 border-t border-zinc-900">
+                EXIF: ƒ/2 · 1/15s · 7.1mm · ISO 3200
+              </div>
             </div>
           </div>
 
           <!-- Frame B Card -->
-          <div class="rounded-xl border border-zinc-800 bg-zinc-900/60 overflow-hidden flex flex-col">
-            <div class="px-4 py-2.5 bg-zinc-900/90 border-b border-zinc-800 flex items-center justify-between text-xs font-mono">
-              <span class="text-amber-400 font-bold flex items-center gap-1.5">
+          <div class="rounded-xl border border-amber-500/40 bg-zinc-900/60 overflow-hidden flex flex-col">
+            <div class="px-3.5 py-2.5 bg-zinc-900/90 border-b border-zinc-800 flex items-center justify-between text-xs font-mono">
+              <span class="text-amber-300 font-bold flex items-center gap-1.5">
                 <span class="w-2 h-2 rounded-full bg-amber-400"></span>
-                <span>{data.rawImageSecondaryLabel || 'FRAME B: HIGH-CONTRAST SILHOUETTE'}</span>
+                <span>{data.rawImageSecondaryLabel || "FRAME B: 'KATANA SLASH'"}</span>
               </span>
-              <span class="text-[10px] text-zinc-500 font-mono">KATANA CUT PROFILE</span>
+              <span class="text-[10px] text-amber-400/90 px-1.5 py-0.5 rounded bg-amber-950/80 border border-amber-800/40 font-mono">SILHOUETTE</span>
             </div>
-            <div class="relative aspect-video bg-black flex items-center justify-center p-3">
+            <div class="relative aspect-video bg-black flex items-center justify-center p-2">
               <img
                 src={resolvedRawImageSecondary}
                 alt="Saturn Frame B Observation"
                 class="max-h-full max-w-full object-contain"
               />
             </div>
-            <div class="p-3.5 text-xs font-mono text-zinc-300 border-t border-zinc-800/80 bg-zinc-950/70 space-y-1">
-              <div class="text-zinc-400 text-[11px] uppercase tracking-wider font-semibold">PHOTOMETRIC NOTE:</div>
+            <div class="p-3 text-xs font-mono text-zinc-300 border-t border-zinc-800/80 bg-zinc-950/70 space-y-1.5 flex-1 flex flex-col justify-between">
               <p class="text-zinc-300 leading-relaxed font-sans text-xs">
-                High-contrast silhouette exhibiting an acute diagonal limb cutoff across the upper hemisphere—produced by the shallow edge-on ring plane casting a razor-sharp shadow boundary.
+                High-contrast silhouette revealing an acute diagonal cutoff across the upper hemisphere—produced by the shallow edge-on ring plane shadow boundary slicing the cloud deck.
               </p>
+              <div class="text-[11px] text-zinc-500 font-mono pt-1 border-t border-zinc-900">
+                EXIF: ƒ/2 · 1/15s · 7.1mm · ISO 3200
+              </div>
             </div>
           </div>
+
+          <!-- Stellarium Reticle Card -->
+          {resolvedStellariumImage && (
+            <div class="rounded-xl border border-zinc-800 bg-zinc-900/60 overflow-hidden flex flex-col">
+              <div class="px-3.5 py-2.5 bg-zinc-900/90 border-b border-zinc-800 flex items-center justify-between text-xs font-mono">
+                <span class="text-emerald-400 font-bold flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                  <span>STELLARIUM RETICLE</span>
+                </span>
+                <span class="text-[10px] text-emerald-400/90 px-1.5 py-0.5 rounded bg-emerald-950/80 border border-emerald-800/40 font-mono">EPHEMERIS</span>
+              </div>
+              <div class="relative aspect-video bg-black flex items-center justify-center p-2">
+                <img
+                  src={resolvedStellariumImage}
+                  alt="Saturn Stellarium Alignment"
+                  class="max-h-full max-w-full object-contain"
+                />
+              </div>
+              <div class="p-3 text-xs font-mono text-zinc-300 border-t border-zinc-800/80 bg-zinc-950/70 space-y-1.5 flex-1 flex flex-col justify-between">
+                <p class="text-zinc-300 leading-relaxed font-sans text-xs">
+                  Ground-truth celestial sky chart verifying target coordinates in Aquarius (RA 22h 45m · Dec -10° 12') and validating angular scale and orientation.
+                </p>
+                <div class="text-[11px] text-zinc-500 font-mono pt-1 border-t border-zinc-900">
+                  REF: J2000 Ephemeris Correlated
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </section>
     )}
